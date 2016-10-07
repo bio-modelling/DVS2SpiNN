@@ -1,4 +1,5 @@
-﻿FPGA SpiNNaker – eDVS connection User guide
+FPGA eDVS - SpiNNaker connection User guide
+===========================================
 
 Key 0 – RST 
 Key 1 is broken
