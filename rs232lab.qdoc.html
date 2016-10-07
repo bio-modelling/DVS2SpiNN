@@ -1,0 +1,1034 @@
+<html>
+<head>
+<title>rs232lab</title>
+</head>
+<body>
+<h1>Project: rs232lab</h1>
+
+<h2>Contents</h2>
+   
+<h3>Verilog Files</h3>
+
+<dir>
+<a href="#rs232lab.v">rs232lab.v</a><br>
+<a href="#LCD_Display.v">LCD_Display.v</a><br>
+<a href="#LCD_display_string.v">LCD_display_string.v</a><br>
+<a href="#reset_delay.v">reset_delay.v</a><br>
+<a href="#RS232_In.v">RS232_In.v</a><br>
+<a href="#RS232_Out.v">RS232_Out.v</a><br>
+<a href="#Baud_Counter.v">Baud_Counter.v</a><br>
+<a href="#oneshot.v">oneshot.v</a><br>
+
+</dir>
+
+
+<h3>Quartus Files</h3>
+<dir>
+<a href="#fit.summary">fit.summary</a><br>
+<a href="#tan.summary">tan.summary</a><br>
+
+</dir>
+
+<h2>Verilog Files</h2>
+
+<a name="rs232lab.v">
+
+<h3><code>rs232lab.v</code></h3>
+<p><pre>
+module rs232lab(
+  input CLOCK_50,    //    50 MHz clock
+  input [3:0] KEY,      //    Pushbutton[3:0]
+  input [17:0] SW,    //    Toggle Switch[17:0]
+  output [6:0]    HEX0,HEX1,HEX2,HEX3,HEX4,HEX5,HEX6,HEX7,  // Seven Segment Digits
+  output [8:0] LEDG,  //    LED Green
+  output [17:0] LEDR,  //    LED Red
+  inout [35:0] GPIO_0,GPIO_1,    //    GPIO Connections
+ //    UART
+  output UART_TXD, // UART Transmitter
+  input  UART_RXD, // UART Receiver
+//    LCD Module 16X2
+  output LCD_ON,    // LCD Power ON/OFF
+  output LCD_BLON,    // LCD Back Light ON/OFF
+  output LCD_RW,    // LCD Read/Write Select, 0 = Write, 1 = Read
+  output LCD_EN,    // LCD Enable
+  output LCD_RS,    // LCD Command/Data Select, 0 = Command, 1 = Data
+  inout [7:0] LCD_DATA    // LCD Data bus 8 bits
+);
+
+//    All inout port turn to tri-state
+assign    GPIO_0        =    36'hzzzzzzzzz;
+assign    GPIO_1        =    36'hzzzzzzzzz;
+
+wire [6:0] myclock;
+wire RST;
+assign RST = KEY[0];
+wire reset = ~RST;
+
+// reset delay gives some time for peripherals to initialize
+wire DLY_RST;
+Reset_Delay r0(    .iCLK(CLOCK_50),.oRESET(DLY_RST) );
+
+// Send switches to red leds 
+assign LEDR = SW;
+
+// turn off green leds
+//assign LEDG = 9'h000;
+
+//assign LEDG[1] = swap;
+assign LEDG[7] = transmitting_data;
+assign LEDG[6] = receiving_data;
+
+// turn LCD ON
+assign    LCD_ON        =    1'b1;
+assign    LCD_BLON    =    1'b1;
+
+reg [7:0] transmit_addr;
+
+romtext mem1(
+.address(transmit_addr),
+.clock(CLOCK_50),
+.q(transmit_data)
+);
+
+parameter XMT_LIMIT = 8'h5f; // number of character in packet
+
+// handle transmission
+always @(posedge transmit_data_en)
+    if (reset)
+        transmit_addr &lt;= 8'h00;
+    else if (transmit_addr&lt;XMT_LIMIT)
+        transmit_addr &lt;= transmit_addr + 1'b1;
+    else
+        transmit_addr &lt;= 8'h00;
+
+wire [7:0] q;
+wire [4:0] addr;
+wire [3:0] state;
+
+assign LEDG[3] = data_received;
+
+/*
+wire my_receive = ~KEY[1];
+assign LEDG[0] = my_receive;
+*/
+
+LCD_display_string d(
+.clock(CLOCK_50),
+.received(data_received), // data_received
+.q(received_data),
+.adx(adx),
+.index(addr),
+.out(q)
+);
+
+
+LCD_Display u1(
+// Host Side
+   .iCLK_50MHZ(CLOCK_50),
+   .iRST_N(DLY_RST),
+   .char_index(addr),
+   .char_value(q),
+// LCD Side
+   .DATA_BUS(LCD_DATA),
+   .LCD_RW(LCD_RW),
+   .LCD_E(LCD_EN),
+   .LCD_RS(LCD_RS)
+);
+
+// blank unused 7-segment digits
+wire [6:0] blank = ~7'h00;
+//assign HEX0 = blank;
+//assign HEX1 = blank;
+assign HEX2 = blank;
+assign HEX3 = blank;
+//assign HEX4 = blank;
+//assign HEX5 = blank;
+//assign HEX6 = blank;
+//assign HEX7 = blank;
+
+/*
+reg [7:0] qx;
+hex_7seg seg2(qx[3:0],HEX2);
+hex_7seg seg3(qx[7:4],HEX3);
+always @(posedge data_received)
+    qx &lt;= received_data;
+*/
+
+wire [4:0] adx;
+hex_7seg seg1({3'h0,adx[4]},HEX1);
+hex_7seg seg0(adx[3:0],HEX0);
+
+hex_7seg seg4(transmit_data[3:0],HEX4); 
+hex_7seg seg5(transmit_data[7:4],HEX5);
+
+hex_7seg seg6(received_data[3:0],HEX6); 
+hex_7seg seg7(received_data[7:4],HEX7);
+
+
+
+parameter DATA_WIDTH = 8;
+wire [DATA_WIDTH-1:0] received_data;
+wire [DATA_WIDTH-1:0] transmit_data;
+wire transmitting_data;
+wire receiving_data, data_received;
+wire transmit_data_en;
+
+
+wire flag;
+oneshot trig(flag,~KEY[3],CLOCK_50);
+
+// Count for the oscilloscope
+//oneshot(transmit_data_en,clk,CLOCK_50);
+assign transmit_data_en = SW[0]? clk: flag;
+
+reg [31:0] count;
+reg clk;
+
+always @(posedge CLOCK_50)
+begin
+    if (count &lt; 50*1000*1000)
+    begin
+        count &lt;= count + 1'b1;
+        clk &lt;= 1'b0;
+    end
+    else
+    begin
+        count &lt;= 0;
+        clk &lt;= 1'b1;
+    end
+end
+
+
+
+wire UART;
+
+RS232_Out u2(
+// Inputs
+.clk(CLOCK_50),
+.reset(reset),
+    
+.transmit_data(transmit_data),
+.transmit_data_en(transmit_data_en),
+
+// Outputs
+.serial_data_out(UART_TXD), // UART_TXD
+.transmitting_data(transmitting_data)
+);
+
+RS232_In u3(
+// Inputs
+.clk(CLOCK_50),
+.reset(reset),
+.serial_data_in(UART_RXD), // UART_RXD
+.receive_data_en(1'b1),
+// Outputs
+.received_data(received_data),
+.data_received(data_received),
+.receiving_data(receiving_data)
+);
+
+endmodule</pre>
+<a name="LCD_Display.v">
+
+<h3><code>LCD_Display.v</code></h3>
+<p><pre>
+/*
+ SW8 (GLOBAL RESET) resets LCD
+ENTITY LCD_Display IS
+-- Enter number of live Hex hardware data values to display
+-- (do not count ASCII character constants)
+    GENERIC(Num_Hex_Digits: Integer:= 2); 
+-----------------------------------------------------------------------
+-- LCD Displays 16 Characters on 2 lines
+-- LCD_display string is an ASCII character string entered in hex for 
+-- the two lines of the  LCD Display   (See ASCII to hex table below)
+-- Edit LCD_Display_String entries above to modify display
+-- Enter the ASCII character's 2 hex digit equivalent value
+-- (see table below for ASCII hex values)
+-- To display character assign ASCII value to LCD_display_string(x)
+-- To skip a character use 8'h20" (ASCII space)
+-- To dislay "live" hex values from hardware on LCD use the following: 
+--   make array element for that character location 8'h0" &amp; 4-bit field from Hex_Display_Data
+--   state machine sees 8'h0" in high 4-bits &amp; grabs the next lower 4-bits from Hex_Display_Data input
+--   and performs 4-bit binary to ASCII conversion needed to print a hex digit
+--   Num_Hex_Digits must be set to the count of hex data characters (ie. "00"s) in the display
+--   Connect hardware bits to display to Hex_Display_Data input
+-- To display less than 32 characters, terminate string with an entry of FORMFEED
+--  (fewer characters may slightly increase the LCD's data update rate)
+------------------------------------------------------------------- 
+--                        ASCII HEX TABLE
+--  Hex                        Low Hex Digit
+-- Value  0   1   2   3   4   5   6   7   8   9   A   B   C   D   E   F
+------\----------------------------------------------------------------
+--H  2 |  SP  !   "   #   $   %   &amp;   '   (   )   *   +   ,   -   .   /
+--i  3 |  0   1   2   3   4   5   6   7   8   9   :   ;   &lt;   =   &gt;   ?
+--g  4 |  @   A   B   C   D   E   F   G   H   I   J   K   L   M   N   O
+--h  5 |  P   Q   R   S   T   U   V   W   X   Y   Z   [   \   ]   ^   _
+--   6 |  `   a   b   c   d   e   f   g   h   i   j   k   l   m   n   o
+--   7 |  p   q   r   s   t   u   v   w   x   y   z   {   |   }   ~ DEL
+-----------------------------------------------------------------------
+-- Example "A" is row 4 column 1, so hex value is 8'h41"
+-- *see LCD Controller's Datasheet for other graphics characters available
+*/
+        
+module LCD_Display(
+input iCLK_50MHZ, iRST_N,
+
+// LCD control
+output reg LCD_RS, LCD_E, 
+output LCD_RW,
+inout [7:0] DATA_BUS,
+
+// character memory
+output reg [5:0] char_index,
+input  [7:0] char_value
+
+);
+
+parameter
+HOLD = 4'h0,
+FUNC_SET = 4'h1,
+DISPLAY_ON = 4'h2,
+MODE_SET = 4'h3,
+Print_String = 4'h4,
+LINE2 = 4'h5,
+RETURN_HOME = 4'h6,
+DROP_LCD_E = 4'h7,
+RESET1 = 4'h8,
+RESET2 = 4'h9,
+RESET3 = 4'ha,
+DISPLAY_OFF = 4'hb,
+DISPLAY_CLEAR = 4'hc;
+
+parameter
+FORM_FEED = 8'h0C;
+
+
+reg [3:0] state, next_command;
+// Enter new ASCII hex data above for LCD Display
+reg [7:0] DATA_BUS_VALUE;
+reg [19:0] CLK_COUNT_400HZ;
+reg CLK_400HZ, LCD_RW_INT;
+
+// BIDIRECTIONAL TRI STATE LCD DATA BUS
+assign DATA_BUS = (LCD_RW_INT? 8'bZZZZZZZZ: DATA_BUS_VALUE);
+
+/*
+LCD_display_string u1(
+.clock(write),
+.index(CHAR_COUNT),
+.out(Next_Char),
+.addr(addr),
+.data(data),
+.q(q)
+);
+*/
+
+assign LCD_RW = LCD_RW_INT;
+
+// 0xF424 is 62500 * 20 nsec = 1.25 msec (half cycle) or 2.5 msec (full cycle)
+// 400 Hz corresponds to period of 2.5 msec
+
+always @(posedge iCLK_50MHZ or negedge iRST_N)
+    if (!iRST_N)
+    begin
+       CLK_COUNT_400HZ &lt;= 20'h00000;
+       CLK_400HZ &lt;= 1'b0;
+    end
+    else if (CLK_COUNT_400HZ &lt; 20'h0F424)
+    begin
+       CLK_COUNT_400HZ &lt;= CLK_COUNT_400HZ + 1'b1;
+    end
+    else
+    begin
+      CLK_COUNT_400HZ &lt;= 20'h00000;
+      CLK_400HZ &lt;= ~CLK_400HZ;
+    end
+// State Machine to send commands and data to LCD DISPLAY
+
+always @(posedge CLK_400HZ or negedge iRST_N)
+    if (!iRST_N)
+    begin
+     state &lt;= RESET1;
+    end
+    else
+    case (state)
+    RESET1:            
+// Set Function to 8-bit transfer and 2 line display with 5x8 Font size
+// see Hitachi HD44780 family data sheet for LCD command and timing details
+    begin
+      LCD_E &lt;= 1'b1;
+      LCD_RS &lt;= 1'b0;
+      LCD_RW_INT &lt;= 1'b0;
+      DATA_BUS_VALUE &lt;= 8'h38; // initialize display
+      state &lt;= DROP_LCD_E;
+      next_command &lt;= RESET2;
+      char_index &lt;= 5'h00;
+    end
+    RESET2:
+    begin
+      LCD_E &lt;= 1'b1;
+      LCD_RS &lt;= 1'b0;
+      LCD_RW_INT &lt;= 1'b0;
+      DATA_BUS_VALUE &lt;= 8'h38;
+      state &lt;= DROP_LCD_E;
+      next_command &lt;= RESET3;
+    end
+    RESET3:
+    begin
+      LCD_E &lt;= 1'b1;
+      LCD_RS &lt;= 1'b0;
+      LCD_RW_INT &lt;= 1'b0;
+      DATA_BUS_VALUE &lt;= 8'h38;
+      state &lt;= DROP_LCD_E;
+      next_command &lt;= FUNC_SET;
+    end
+// EXTRA STATES ABOVE ARE NEEDED FOR RELIABLE PUSHBUTTON RESET OF LCD
+
+    FUNC_SET:
+    begin
+      LCD_E &lt;= 1'b1;
+      LCD_RS &lt;= 1'b0;
+      LCD_RW_INT &lt;= 1'b0;
+      DATA_BUS_VALUE &lt;= 8'h38;
+      state &lt;= DROP_LCD_E;
+      next_command &lt;= DISPLAY_OFF;
+    end
+
+// Turn off Display and Turn off cursor
+    DISPLAY_OFF:
+    begin
+      LCD_E &lt;= 1'b1;
+      LCD_RS &lt;= 1'b0;
+      LCD_RW_INT &lt;= 1'b0;
+      DATA_BUS_VALUE &lt;= 8'h08;
+      state &lt;= DROP_LCD_E;
+      next_command &lt;= DISPLAY_CLEAR;
+    end
+
+// Clear Display and Turn off cursor
+    DISPLAY_CLEAR:
+    begin
+      LCD_E &lt;= 1'b1;
+      LCD_RS &lt;= 1'b0;
+      LCD_RW_INT &lt;= 1'b0;
+      DATA_BUS_VALUE &lt;= 8'h01;
+      state &lt;= DROP_LCD_E;
+      next_command &lt;= DISPLAY_ON;
+    end
+
+// Turn on Display and Turn off cursor
+    DISPLAY_ON:
+    begin
+      LCD_E &lt;= 1'b1;
+      LCD_RS &lt;= 1'b0;
+      LCD_RW_INT &lt;= 1'b0;
+      DATA_BUS_VALUE &lt;= 8'h0C;
+      state &lt;= DROP_LCD_E;
+      next_command &lt;= MODE_SET;
+    end
+
+// Set write mode to auto increment address and move cursor to the right
+    MODE_SET:
+    begin
+      LCD_E &lt;= 1'b1;
+      LCD_RS &lt;= 1'b0;
+      LCD_RW_INT &lt;= 1'b0;
+      DATA_BUS_VALUE &lt;= 8'h06;
+      state &lt;= DROP_LCD_E;
+      next_command &lt;= Print_String;
+    end
+
+// Write ASCII hex character in first LCD character location
+    Print_String:
+    begin
+      state &lt;= DROP_LCD_E;
+      LCD_E &lt;= 1'b1;
+      LCD_RS &lt;= 1'b1;
+      LCD_RW_INT &lt;= 1'b0;
+    // ASCII character to output
+      if (char_value[7:4] != 4'h01)
+        DATA_BUS_VALUE &lt;= char_value;
+        // Convert 4-bit value to an ASCII hex digit
+      else if (char_value[3:0] &gt;9)
+        // ASCII A...F
+         DATA_BUS_VALUE &lt;= {4'h4,char_value[3:0]-4'h9};
+      else
+        // ASCII 0...9
+         DATA_BUS_VALUE &lt;= {4'h3,char_value[3:0]};
+    // Loop to send out 32 characters to LCD Display  (16 by 2 lines)
+      if ((char_index &lt; 31) &amp;&amp; (char_value != FORM_FEED))
+         char_index &lt;= char_index + 1'b1;
+      else
+         char_index &lt;= 5'h00; 
+    // Jump to second line?
+      if (char_index == 15)
+        next_command &lt;= LINE2;
+    // Return to first line?
+      else if ((char_index == 31) || (char_value == FORM_FEED))
+        next_command &lt;= RETURN_HOME;
+      else
+        next_command &lt;= Print_String;
+    end
+
+// Set write address to line 2 character 1
+    LINE2:
+    begin
+      LCD_E &lt;= 1'b1;
+      LCD_RS &lt;= 1'b0;
+      LCD_RW_INT &lt;= 1'b0;
+      DATA_BUS_VALUE &lt;= 8'hC0;
+      state &lt;= DROP_LCD_E;
+      next_command &lt;= Print_String;
+    end
+
+// Return write address to first character postion on line 1
+    RETURN_HOME:
+    begin
+      LCD_E &lt;= 1'b1;
+      LCD_RS &lt;= 1'b0;
+      LCD_RW_INT &lt;= 1'b0;
+      DATA_BUS_VALUE &lt;= 8'h80;
+      state &lt;= DROP_LCD_E;
+      next_command &lt;= Print_String;
+    end
+
+// The next three states occur at the end of each command or data transfer to the LCD
+// Drop LCD E line - falling edge loads inst/data to LCD controller
+    DROP_LCD_E:
+    begin
+      LCD_E &lt;= 1'b0;
+      state &lt;= HOLD;
+    end
+// Hold LCD inst/data valid after falling edge of E line                
+    HOLD:
+    begin
+      state &lt;= next_command;
+    end
+    endcase
+endmodule
+</pre>
+<a name="LCD_display_string.v">
+
+<h3><code>LCD_display_string.v</code></h3>
+<p><pre>
+/*
+------------------------------------------------------------------- 
+--                        ASCII HEX TABLE
+--  Hex                        Low Hex Digit
+-- Value  0   1   2   3   4   5   6   7   8   9   A   B   C   D   E   F
+------\----------------------------------------------------------------
+--H  2 |  SP  !   "   #   $   %   &amp;   '   (   )   *   +   ,   -   .   /
+--i  3 |  0   1   2   3   4   5   6   7   8   9   :   ;   &lt;   =   &gt;   ?
+--g  4 |  @   A   B   C   D   E   F   G   H   I   J   K   L   M   N   O
+--h  5 |  P   Q   R   S   T   U   V   W   X   Y   Z   [   \   ]   ^   _
+--   6 |  `   a   b   c   d   e   f   g   h   i   j   k   l   m   n   o
+--   7 |  p   q   r   s   t   u   v   w   x   y   z   {   |   }   ~ DEL
+-----------------------------------------------------------------------
+-- Example "A" is row 4 column 1, so hex value is 8'h41"
+-- *see LCD Controller's Datasheet for other graphics characters available
+*/
+
+module LCD_display_string(
+input received,
+input [7:0] q,
+output reg swap,
+output reg [4:0] adx,
+input clock,
+input [4:0] index,
+output reg [7:0] out
+);
+
+reg [7:0] mem[0:31];
+
+//reg [3:0] adx;
+
+
+integer k;
+initial
+    for (k=0; k&lt;32; k=k+1)
+        mem[k] = 8'h20;
+    
+
+always @(posedge received)
+begin
+    if (adx==5'h1F) 
+    begin
+        adx &lt;= 5'h00;
+    end
+    else adx &lt;= adx + 1'b1;
+end
+
+always @(posedge received)
+    mem[adx] &lt;= q;
+
+
+always @(posedge clock)
+    out &lt;= mem[index]; 
+
+endmodule</pre>
+<a name="reset_delay.v">
+
+<h3><code>reset_delay.v</code></h3>
+<p><pre>
+module    Reset_Delay(iCLK,oRESET);
+input        iCLK;
+output reg    oRESET;
+reg    [19:0]    Cont;
+
+always@(posedge iCLK)
+begin
+    if(Cont!=20'hFFFFF)
+    begin
+        Cont    &lt;=    Cont+1'b1;
+        oRESET    &lt;=    1'b0;
+    end
+    else
+    oRESET    &lt;=    1'b1;
+end
+
+endmodule</pre>
+<a name="RS232_In.v">
+
+<h3><code>RS232_In.v</code></h3>
+<p><pre>
+module RS232_In (
+// Inputs
+input clk,
+input reset,
+input serial_data_in,
+input receive_data_en,
+// Outputs
+output reg [(DATA_WIDTH-1):0] received_data,
+output reg receiving_data,
+output reg data_received,
+output baud_clock
+);
+
+parameter BAUD_COUNT = 9'd434;
+parameter DATA_WIDTH = 8;
+parameter TOTAL_DATA_WIDTH = DATA_WIDTH + 2;
+
+wire shift_data_reg_en;
+wire all_bits_received;
+
+
+assign baud_clock = shift_data_reg_en;
+reg [(TOTAL_DATA_WIDTH - 1):0]    data_in_shift_reg;
+//reg receiving_data;
+reg prev_receiving_data;
+
+
+
+always @(posedge clk)
+begin
+    if (reset == 1'b1)
+        receiving_data &lt;= 1'b0;
+    else if (all_bits_received == 1'b1)
+        receiving_data &lt;= 1'b0;
+    else if (serial_data_in == 1'b0)
+        receiving_data &lt;= 1'b1;
+end
+
+always @(posedge clk)
+begin
+    prev_receiving_data  &lt;= receiving_data;
+    if (receiving_data==1'b1)
+        data_received &lt;= 1'b0;
+    else if (prev_receiving_data==1'b1)
+    begin
+        data_received &lt;= 1'b1;
+        received_data &lt;= data_in_shift_reg[DATA_WIDTH:1];
+    end
+end
+
+always @(posedge clk)
+begin
+    if (reset == 1'b1)
+        data_in_shift_reg    &lt;= {TOTAL_DATA_WIDTH{1'b0}};
+    else if (shift_data_reg_en)
+        data_in_shift_reg    &lt;= 
+            {serial_data_in, data_in_shift_reg[(TOTAL_DATA_WIDTH - 1):1]};
+end
+
+Baud_Counter RS232_In_Counter (
+// Inputs
+.clk(clk),
+.reset(reset),
+.reset_counters(~receiving_data),
+// Outputs
+.baud_clock_rising_edge(),
+.baud_clock_falling_edge(shift_data_reg_en),
+.all_bits_transmitted(all_bits_received)
+);
+defparam 
+    RS232_In_Counter.BAUD_COUNT= BAUD_COUNT,
+    RS232_In_Counter.DATA_WIDTH= DATA_WIDTH;
+/*
+Altera_UP_SYNC_FIFO RS232_In_FIFO (
+    // Inputs
+    .clk            (clk),
+    .reset            (reset),
+
+    .write_en        (all_bits_received &amp; ~fifo_is_full),
+    .write_data        (data_in_shift_reg[(DATA_WIDTH + 1):1]),
+
+    .read_en        (receive_data_en &amp; ~fifo_is_empty),
+    
+    // Bidirectionals
+
+    // Outputs
+    .fifo_is_empty    (fifo_is_empty),
+    .fifo_is_full    (fifo_is_full),
+    .words_used        (fifo_used),
+
+    .read_data        (received_data)
+);
+defparam 
+    RS232_In_FIFO.DATA_WIDTH    = DATA_WIDTH,
+    RS232_In_FIFO.DATA_DEPTH    = 128,
+    RS232_In_FIFO.ADDR_WIDTH    = 7;
+*/
+endmodule
+
+</pre>
+<a name="RS232_Out.v">
+
+<h3><code>RS232_Out.v</code></h3>
+<p><pre>
+module RS232_Out(
+// Inputs
+input clk,
+input reset,
+    
+input [DATA_WIDTH:1] transmit_data,
+input transmit_data_en,
+
+// Outputs
+output reg serial_data_out,
+output reg transmitting_data
+);
+
+parameter DATA_WIDTH = 8;
+parameter BAUD_COUNT = 9'd434;
+
+wire shift_data_reg_en, read_input_en;
+//wire baud_clock;
+wire all_bits_transmitted;
+
+// debug outputs
+//assign baud_clock = shift_data_reg_en;
+//assign next_bit = data_out_shift_reg[0];
+
+reg [DATA_WIDTH:0] data_out_shift_reg;
+
+initial
+begin
+    serial_data_out &lt;= 1'b1;
+    data_out_shift_reg    &lt;= {(DATA_WIDTH + 1){1'b1}}; // all ones
+end
+
+always @(posedge clk)
+begin
+    if (reset == 1'b1)
+        serial_data_out &lt;= 1'b1; 
+    else
+        serial_data_out &lt;= data_out_shift_reg[0]; //next bit
+end
+
+always @(posedge clk)
+begin
+    if (reset == 1'b1)
+        transmitting_data &lt;= 1'b0;
+    else if (all_bits_transmitted == 1'b1)
+        transmitting_data &lt;= 1'b0;
+    else if (transmit_data_en)
+        transmitting_data &lt;= 1'b1;
+end
+
+always @(posedge clk)
+begin
+    if (reset == 1'b1)
+        data_out_shift_reg    &lt;= {(DATA_WIDTH + 1){1'b1}}; // all ones
+    else if (read_input_en)
+        data_out_shift_reg    &lt;=  {transmit_data,1'b0};
+    else if (shift_data_reg_en)
+        data_out_shift_reg    &lt;= 
+            {1'b1, data_out_shift_reg[DATA_WIDTH:1]};
+end
+
+
+assign read_input_en = ~transmitting_data &amp; ~all_bits_transmitted &amp; transmit_data_en;
+
+Baud_Counter Out_Counter (
+// Inputs
+.clk(clk), .reset(reset), .reset_counters(~transmitting_data),
+// Outputs
+.baud_clock_rising_edge(shift_data_reg_en),
+.baud_clock_falling_edge(),
+.all_bits_transmitted(all_bits_transmitted)
+);
+defparam
+    Out_Counter.BAUD_COUNT = BAUD_COUNT,
+    Out_Counter.DATA_WIDTH = DATA_WIDTH;
+
+/*
+Altera_UP_SYNC_FIFO RS232_Out_FIFO (
+    // Inputs
+    .clk            (clk),
+    .reset            (reset),
+
+    .write_en        (transmit_data_en &amp; ~fifo_is_full),
+    .write_data        (transmit_data),
+
+    .read_en        (read_fifo_en),
+    
+    // Bidirectionals
+
+    // Outputs
+    .fifo_is_empty    (fifo_is_empty),
+    .fifo_is_full    (fifo_is_full),
+    .words_used        (fifo_used),
+
+    .read_data        (data_from_fifo)
+);
+defparam 
+    RS232_Out_FIFO.DATA_WIDTH    = DATA_WIDTH,
+    RS232_Out_FIFO.DATA_DEPTH    = 128,
+    RS232_Out_FIFO.ADDR_WIDTH    = 7;
+*/
+endmodule
+
+</pre>
+<a name="Baud_Counter.v">
+
+<h3><code>Baud_Counter.v</code></h3>
+<p><pre>
+module Baud_Counter (
+    // Inputs
+input    clk,
+input    reset,
+    
+input    reset_counters,
+
+    // Outputs
+output reg baud_clock_rising_edge,
+output reg baud_clock_falling_edge,
+output reg all_bits_transmitted
+);
+
+parameter BAUD_COUNTER_WIDTH = 9;
+parameter BAUD_COUNT =  5;
+parameter BAUD_TICK_COUNT =  BAUD_COUNT - 1; //9'd433;
+parameter HALF_BAUD_TICK_COUNT    = BAUD_COUNT / 2; //9'd216;
+
+parameter DATA_WIDTH = 9;
+parameter TOTAL_DATA_WIDTH = DATA_WIDTH + 2;
+
+reg [(BAUD_COUNTER_WIDTH - 1):0] baud_counter;
+reg [3:0] bit_counter;
+
+// control baud_counter
+always @(posedge clk)
+begin
+    if (reset == 1'b1)
+        baud_counter &lt;= {BAUD_COUNTER_WIDTH{1'b0}};
+    else if (reset_counters)
+        baud_counter &lt;= {BAUD_COUNTER_WIDTH{1'b0}};
+    else if (baud_counter == BAUD_TICK_COUNT)
+        baud_counter &lt;= {BAUD_COUNTER_WIDTH{1'b0}};
+    else
+        baud_counter &lt;= baud_counter + 1'b1;
+end
+
+// control baud_clock_rising_edge signal
+always @(posedge clk)
+begin
+    if (reset == 1'b1)
+        baud_clock_rising_edge &lt;= 1'b0;
+    else if (baud_counter == BAUD_TICK_COUNT)
+        baud_clock_rising_edge &lt;= 1'b1;
+    else
+        baud_clock_rising_edge &lt;= 1'b0;
+end
+
+// control baud_clock_falling_edge signal
+always @(posedge clk)
+begin
+    if (reset == 1'b1)
+        baud_clock_falling_edge &lt;= 1'b0;
+    else if (baud_counter == HALF_BAUD_TICK_COUNT)
+        baud_clock_falling_edge &lt;= 1'b1;
+    else
+        baud_clock_falling_edge &lt;= 1'b0;
+end
+
+// control bit counter
+always @(posedge clk)
+begin
+    if (reset == 1'b1)
+        bit_counter &lt;= 4'h0;
+    else if (reset_counters)
+        bit_counter &lt;= 4'h0;
+    else if (bit_counter == TOTAL_DATA_WIDTH)
+        bit_counter &lt;= 4'h0;
+    else if (baud_counter == BAUD_TICK_COUNT)
+        bit_counter &lt;= bit_counter + 4'h1;
+end
+
+// control all_bits_transmitted signal
+always @(posedge clk)
+begin
+    if (reset == 1'b1)
+        all_bits_transmitted &lt;= 1'b0;
+    else if (bit_counter == TOTAL_DATA_WIDTH)
+        all_bits_transmitted &lt;= 1'b1;
+    else
+        all_bits_transmitted &lt;= 1'b0;
+end
+
+endmodule
+
+</pre>
+<a name="oneshot.v">
+
+<h3><code>oneshot.v</code></h3>
+<p><pre>
+module oneshot(output reg pulse_out, input trigger_in, input clk);
+reg delay;
+
+always @ (posedge clk)
+begin
+    if (trigger_in &amp;&amp; !delay) pulse_out &lt;= 1'b1;
+    else pulse_out &lt;= 1'b0;
+    delay &lt;= trigger_in;
+end 
+endmodule
+</pre>
+
+
+<h2>Quartus Compilation Summary</h2>
+
+<a name="fit.summary">
+
+<h3><code>fit.summary</code></h3>
+<p><pre>
+Fitter Status : Successful - Mon Nov 09 21:43:07 2009
+Quartus II Version : 9.0 Build 235 06/17/2009 SP 2 SJ Web Edition
+Revision Name : rs232lab
+Top-level Entity Name : rs232lab
+Family : Cyclone II
+Device : EP2C35F672C6
+Timing Models : Final
+Total logic elements : 296 / 33,216 ( &lt; 1 % )
+    Total combinational functions : 292 / 33,216 ( &lt; 1 % )
+    Dedicated logic registers : 198 / 33,216 ( &lt; 1 % )
+Total registers : 198
+Total pins : 193 / 475 ( 41 % )
+Total virtual pins : 0
+Total memory bits : 2,304 / 483,840 ( &lt; 1 % )
+Embedded Multiplier 9-bit elements : 0 / 70 ( 0 % )
+Total PLLs : 0 / 4 ( 0 % )
+</pre>
+<a name="tan.summary">
+
+<h3><code>tan.summary</code></h3>
+<p><pre>
+--------------------------------------------------------------------------------------
+Timing Analyzer Summary
+--------------------------------------------------------------------------------------
+
+Type           : Worst-case tsu
+Slack          : N/A
+Required Time  : None
+Actual Time    : 5.434 ns
+From           : KEY[0]
+To             : RS232_In:u3|data_in_shift_reg[4]
+From Clock     : --
+To Clock       : CLOCK_50
+Failed Paths   : 0
+
+Type           : Worst-case tco
+Slack          : N/A
+Required Time  : None
+Actual Time    : 13.512 ns
+From           : romtext:mem1|altsyncram:altsyncram_component|altsyncram_gk71:auto_generated|ram_block1a0~porta_address_reg7
+To             : HEX4[3]
+From Clock     : CLOCK_50
+To Clock       : --
+Failed Paths   : 0
+
+Type           : Worst-case tpd
+Slack          : N/A
+Required Time  : None
+Actual Time    : 9.765 ns
+From           : SW[16]
+To             : LEDR[16]
+From Clock     : --
+To Clock       : --
+Failed Paths   : 0
+
+Type           : Worst-case th
+Slack          : N/A
+Required Time  : None
+Actual Time    : -0.813 ns
+From           : KEY[0]
+To             : transmit_addr[7]
+From Clock     : --
+To Clock       : CLOCK_50
+Failed Paths   : 0
+
+Type           : Clock Setup: 'CLOCK_50'
+Slack          : N/A
+Required Time  : None
+Actual Time    : 138.14 MHz ( period = 7.239 ns )
+From           : LCD_display_string:d|altsyncram:mem_rtl_0|altsyncram_fvl1:auto_generated|ram_block1a0~portb_address_reg4
+To             : LCD_display_string:d|out[2]
+From Clock     : CLOCK_50
+To Clock       : CLOCK_50
+Failed Paths   : 0
+
+Type           : Clock Setup: 'SW[0]'
+Slack          : N/A
+Required Time  : None
+Actual Time    : 400.16 MHz ( period = 2.499 ns )
+From           : transmit_addr[0]
+To             : transmit_addr[7]
+From Clock     : SW[0]
+To Clock       : SW[0]
+Failed Paths   : 0
+
+Type           : Clock Hold: 'CLOCK_50'
+Slack          : Not operational: Clock Skew &gt; Data Delay
+Required Time  : None
+Actual Time    : N/A
+From           : LCD_display_string:d|out[5]
+To             : LCD_Display:u1|DATA_BUS_VALUE[5]
+From Clock     : CLOCK_50
+To Clock       : CLOCK_50
+Failed Paths   : 105
+
+Type           : Total number of failed paths
+Slack          : 
+Required Time  : 
+Actual Time    : 
+From           : 
+To             : 
+From Clock     : 
+To Clock       : 
+Failed Paths   : 105
+
+--------------------------------------------------------------------------------------
+
+</pre>
+
+
+<p><hr>
+
+<p>Maintained by <a href="http://www.johnloomis.org"> John Loomis</a>, 
+last updated <i>Mon Nov 09 22:56:10 2009</i></p>
+
+</body>
+</html>
+
+

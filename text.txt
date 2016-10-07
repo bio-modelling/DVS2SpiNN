@@ -1,0 +1,6 @@
+0123456789ABCDEF
+Testing RS232
+Row, row, row
+your boat,
+gently down
+the stream.

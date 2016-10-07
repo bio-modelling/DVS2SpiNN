@@ -1,0 +1,62 @@
+
+State Machine - |rs232lab|state
+Name state.000 state.IDLE state.TXD_START state.STOP 
+state.STOP 0 0 0 0 
+state.TXD_START 0 0 1 1 
+state.IDLE 0 1 0 1 
+state.000 1 0 0 1 
+
+State Machine - |rs232lab|spinn_driver:driv|state
+Name state.PARK_ST state.EOP_ST state.TRAN_ST state.IDLE_ST 
+state.IDLE_ST 0 0 0 0 
+state.TRAN_ST 0 0 1 1 
+state.EOP_ST 0 1 0 1 
+state.PARK_ST 1 0 0 1 
+
+State Machine - |rs232lab|receiver:uart_rx|spinn_state
+Name spinn_state.IDLE_ST spinn_state.DUMP_ST spinn_state.WTRQ_ST 
+spinn_state.IDLE_ST 0 0 0 
+spinn_state.WTRQ_ST 1 0 1 
+spinn_state.DUMP_ST 1 1 0 
+
+State Machine - |rs232lab|receiver:uart_rx|state
+Name state.RX_STATE_START state.RX_STATE_STOP state.RX_STATE_DATA 
+state.RX_STATE_START 0 0 0 
+state.RX_STATE_DATA 1 0 1 
+state.RX_STATE_STOP 1 1 0 
+
+State Machine - |rs232lab|transmitter:uart_tx|state
+Name state.STATE_STOP state.STATE_DATA state.STATE_START state.STATE_IDLE 
+state.STATE_IDLE 0 0 0 0 
+state.STATE_START 0 0 1 1 
+state.STATE_DATA 0 1 0 1 
+state.STATE_STOP 1 0 0 1 
+
+State Machine - |rs232lab|LCD_Display:u1|next_command
+Name next_command.DISPLAY_CLEAR next_command.DISPLAY_OFF next_command.RESET3 next_command.RESET2 next_command.RETURN_HOME next_command.LINE2 next_command.Print_String next_command.MODE_SET next_command.DISPLAY_ON next_command.FUNC_SET 
+next_command.FUNC_SET 0 0 0 0 0 0 0 0 0 0 
+next_command.DISPLAY_ON 0 0 0 0 0 0 0 0 1 1 
+next_command.MODE_SET 0 0 0 0 0 0 0 1 0 1 
+next_command.Print_String 0 0 0 0 0 0 1 0 0 1 
+next_command.LINE2 0 0 0 0 0 1 0 0 0 1 
+next_command.RETURN_HOME 0 0 0 0 1 0 0 0 0 1 
+next_command.RESET2 0 0 0 1 0 0 0 0 0 1 
+next_command.RESET3 0 0 1 0 0 0 0 0 0 1 
+next_command.DISPLAY_OFF 0 1 0 0 0 0 0 0 0 1 
+next_command.DISPLAY_CLEAR 1 0 0 0 0 0 0 0 0 1 
+
+State Machine - |rs232lab|LCD_Display:u1|state
+Name state.DISPLAY_CLEAR state.DISPLAY_OFF state.RESET3 state.RESET2 state.HOLD state.DROP_LCD_E state.RETURN_HOME state.LINE2 state.Print_String state.MODE_SET state.DISPLAY_ON state.FUNC_SET state.RESET1 
+state.RESET1 0 0 0 0 0 0 0 0 0 0 0 0 0 
+state.FUNC_SET 0 0 0 0 0 0 0 0 0 0 0 1 1 
+state.DISPLAY_ON 0 0 0 0 0 0 0 0 0 0 1 0 1 
+state.MODE_SET 0 0 0 0 0 0 0 0 0 1 0 0 1 
+state.Print_String 0 0 0 0 0 0 0 0 1 0 0 0 1 
+state.LINE2 0 0 0 0 0 0 0 1 0 0 0 0 1 
+state.RETURN_HOME 0 0 0 0 0 0 1 0 0 0 0 0 1 
+state.DROP_LCD_E 0 0 0 0 0 1 0 0 0 0 0 0 1 
+state.HOLD 0 0 0 0 1 0 0 0 0 0 0 0 1 
+state.RESET2 0 0 0 1 0 0 0 0 0 0 0 0 1 
+state.RESET3 0 0 1 0 0 0 0 0 0 0 0 0 1 
+state.DISPLAY_OFF 0 1 0 0 0 0 0 0 0 0 0 0 1 
+state.DISPLAY_CLEAR 1 0 0 0 0 0 0 0 0 0 0 0 1 

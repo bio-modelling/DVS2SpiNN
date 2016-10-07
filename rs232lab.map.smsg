@@ -1,0 +1,2 @@
+Warning (10268): Verilog HDL information at rs232lab.v(177): always construct contains both blocking and non-blocking assignments
+Info (10281): Verilog HDL Declaration information at rs232lab.v(29): object "start" differs only in case from object "START" in the same scope

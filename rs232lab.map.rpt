@@ -1,0 +1,1272 @@
+Analysis & Synthesis report for rs232lab
+Tue Jun 16 22:55:41 2015
+Quartus II 64-Bit Version 13.0.1 Build 232 06/12/2013 Service Pack 1 SJ Full Version
+
+
+---------------------
+; Table of Contents ;
+---------------------
+  1. Legal Notice
+  2. Analysis & Synthesis Summary
+  3. Analysis & Synthesis Settings
+  4. Parallel Compilation
+  5. Analysis & Synthesis Source Files Read
+  6. Analysis & Synthesis Resource Usage Summary
+  7. Analysis & Synthesis Resource Utilization by Entity
+  8. Analysis & Synthesis RAM Summary
+  9. Analysis & Synthesis IP Cores Summary
+ 10. State Machine - |rs232lab|state
+ 11. State Machine - |rs232lab|spinn_driver:driv|state
+ 12. State Machine - |rs232lab|receiver:uart_rx|spinn_state
+ 13. State Machine - |rs232lab|receiver:uart_rx|state
+ 14. State Machine - |rs232lab|transmitter:uart_tx|state
+ 15. State Machine - |rs232lab|LCD_Display:u1|next_command
+ 16. State Machine - |rs232lab|LCD_Display:u1|state
+ 17. Registers Removed During Synthesis
+ 18. Removed Registers Triggering Further Register Optimizations
+ 19. General Register Statistics
+ 20. Inverted Register Statistics
+ 21. Multiplexer Restructuring Statistics (Restructuring Performed)
+ 22. Source assignments for romtext:mem1|altsyncram:altsyncram_component|altsyncram_gk71:auto_generated
+ 23. Source assignments for LCD_display_string:d|altsyncram:mem_rtl_0|altsyncram_auj1:auto_generated
+ 24. Parameter Settings for User Entity Instance: Top-level Entity: |rs232lab
+ 25. Parameter Settings for User Entity Instance: romtext:mem1|altsyncram:altsyncram_component
+ 26. Parameter Settings for User Entity Instance: LCD_Display:u1
+ 27. Parameter Settings for User Entity Instance: RS232_Out:u2
+ 28. Parameter Settings for User Entity Instance: RS232_Out:u2|Baud_Counter:Out_Counter
+ 29. Parameter Settings for User Entity Instance: baud_rate_gen:uart_baud
+ 30. Parameter Settings for User Entity Instance: transmitter:uart_tx
+ 31. Parameter Settings for User Entity Instance: receiver:uart_rx
+ 32. Parameter Settings for User Entity Instance: spio_spinnaker_link_sync:sync
+ 33. Parameter Settings for Inferred Entity Instance: LCD_display_string:d|altsyncram:mem_rtl_0
+ 34. altsyncram Parameter Settings by Entity Instance
+ 35. Port Connectivity Checks: "hex_7seg:seg4"
+ 36. Port Connectivity Checks: "hex_7seg:seg3"
+ 37. Port Connectivity Checks: "hex_7seg:seg2"
+ 38. Port Connectivity Checks: "hex_7seg:seg1"
+ 39. Port Connectivity Checks: "hex_7seg:seg0"
+ 40. Port Connectivity Checks: "receiver:uart_rx"
+ 41. Port Connectivity Checks: "transmitter:uart_tx"
+ 42. Port Connectivity Checks: "RS232_Out:u2|Baud_Counter:Out_Counter"
+ 43. Port Connectivity Checks: "RS232_Out:u2"
+ 44. Port Connectivity Checks: "LCD_Display:u1"
+ 45. Port Connectivity Checks: "LCD_display_string:d"
+ 46. Port Connectivity Checks: "romtext:mem1"
+ 47. Elapsed Time Per Partition
+ 48. Analysis & Synthesis Messages
+ 49. Analysis & Synthesis Suppressed Messages
+
+
+
+----------------
+; Legal Notice ;
+----------------
+Copyright (C) 1991-2013 Altera Corporation
+Your use of Altera Corporation's design tools, logic functions 
+and other software and tools, and its AMPP partner logic 
+functions, and any output files from any of the foregoing 
+(including device programming or simulation files), and any 
+associated documentation or information are expressly subject 
+to the terms and conditions of the Altera Program License 
+Subscription Agreement, Altera MegaCore Function License 
+Agreement, or other applicable license agreement, including, 
+without limitation, that your use is for the sole purpose of 
+programming logic devices manufactured by Altera and sold by 
+Altera or its authorized distributors.  Please refer to the 
+applicable agreement for further details.
+
+
+
++---------------------------------------------------------------------------------------+
+; Analysis & Synthesis Summary                                                          ;
++------------------------------------+--------------------------------------------------+
+; Analysis & Synthesis Status        ; Successful - Tue Jun 16 22:55:41 2015            ;
+; Quartus II 64-Bit Version          ; 13.0.1 Build 232 06/12/2013 SP 1 SJ Full Version ;
+; Revision Name                      ; rs232lab                                         ;
+; Top-level Entity Name              ; rs232lab                                         ;
+; Family                             ; Cyclone II                                       ;
+; Total logic elements               ; 531                                              ;
+;     Total combinational functions  ; 483                                              ;
+;     Dedicated logic registers      ; 287                                              ;
+; Total registers                    ; 287                                              ;
+; Total pins                         ; 193                                              ;
+; Total virtual pins                 ; 0                                                ;
+; Total memory bits                  ; 256                                              ;
+; Embedded Multiplier 9-bit elements ; 0                                                ;
+; Total PLLs                         ; 0                                                ;
++------------------------------------+--------------------------------------------------+
+
+
++----------------------------------------------------------------------------------------------------------------------+
+; Analysis & Synthesis Settings                                                                                        ;
++----------------------------------------------------------------------------+--------------------+--------------------+
+; Option                                                                     ; Setting            ; Default Value      ;
++----------------------------------------------------------------------------+--------------------+--------------------+
+; Device                                                                     ; EP2C35F672C6       ;                    ;
+; Top-level entity name                                                      ; rs232lab           ; rs232lab           ;
+; Family name                                                                ; Cyclone II         ; Cyclone IV GX      ;
+; Use smart compilation                                                      ; Off                ; Off                ;
+; Enable parallel Assembler and TimeQuest Timing Analyzer during compilation ; On                 ; On                 ;
+; Enable compact report table                                                ; Off                ; Off                ;
+; Restructure Multiplexers                                                   ; Auto               ; Auto               ;
+; Create Debugging Nodes for IP Cores                                        ; Off                ; Off                ;
+; Preserve fewer node names                                                  ; On                 ; On                 ;
+; Disable OpenCore Plus hardware evaluation                                  ; Off                ; Off                ;
+; Verilog Version                                                            ; Verilog_2001       ; Verilog_2001       ;
+; VHDL Version                                                               ; VHDL_1993          ; VHDL_1993          ;
+; State Machine Processing                                                   ; Auto               ; Auto               ;
+; Safe State Machine                                                         ; Off                ; Off                ;
+; Extract Verilog State Machines                                             ; On                 ; On                 ;
+; Extract VHDL State Machines                                                ; On                 ; On                 ;
+; Ignore Verilog initial constructs                                          ; Off                ; Off                ;
+; Iteration limit for constant Verilog loops                                 ; 5000               ; 5000               ;
+; Iteration limit for non-constant Verilog loops                             ; 250                ; 250                ;
+; Add Pass-Through Logic to Inferred RAMs                                    ; On                 ; On                 ;
+; Infer RAMs from Raw Logic                                                  ; On                 ; On                 ;
+; Parallel Synthesis                                                         ; Off                ; Off                ;
+; DSP Block Balancing                                                        ; Auto               ; Auto               ;
+; NOT Gate Push-Back                                                         ; On                 ; On                 ;
+; Power-Up Don't Care                                                        ; On                 ; On                 ;
+; Remove Redundant Logic Cells                                               ; Off                ; Off                ;
+; Remove Duplicate Registers                                                 ; On                 ; On                 ;
+; Ignore CARRY Buffers                                                       ; Off                ; Off                ;
+; Ignore CASCADE Buffers                                                     ; Off                ; Off                ;
+; Ignore GLOBAL Buffers                                                      ; Off                ; Off                ;
+; Ignore ROW GLOBAL Buffers                                                  ; Off                ; Off                ;
+; Ignore LCELL Buffers                                                       ; Off                ; Off                ;
+; Ignore SOFT Buffers                                                        ; On                 ; On                 ;
+; Limit AHDL Integers to 32 Bits                                             ; Off                ; Off                ;
+; Optimization Technique                                                     ; Balanced           ; Balanced           ;
+; Carry Chain Length                                                         ; 70                 ; 70                 ;
+; Auto Carry Chains                                                          ; On                 ; On                 ;
+; Auto Open-Drain Pins                                                       ; On                 ; On                 ;
+; Perform WYSIWYG Primitive Resynthesis                                      ; Off                ; Off                ;
+; Auto ROM Replacement                                                       ; On                 ; On                 ;
+; Auto RAM Replacement                                                       ; On                 ; On                 ;
+; Auto Shift Register Replacement                                            ; Auto               ; Auto               ;
+; Allow Shift Register Merging across Hierarchies                            ; Auto               ; Auto               ;
+; Auto Clock Enable Replacement                                              ; On                 ; On                 ;
+; Strict RAM Replacement                                                     ; Off                ; Off                ;
+; Allow Synchronous Control Signals                                          ; On                 ; On                 ;
+; Force Use of Synchronous Clear Signals                                     ; Off                ; Off                ;
+; Auto RAM to Logic Cell Conversion                                          ; Off                ; Off                ;
+; Auto Resource Sharing                                                      ; Off                ; Off                ;
+; Allow Any RAM Size For Recognition                                         ; Off                ; Off                ;
+; Allow Any ROM Size For Recognition                                         ; Off                ; Off                ;
+; Allow Any Shift Register Size For Recognition                              ; Off                ; Off                ;
+; Use LogicLock Constraints during Resource Balancing                        ; On                 ; On                 ;
+; Ignore translate_off and synthesis_off directives                          ; Off                ; Off                ;
+; Timing-Driven Synthesis                                                    ; Off                ; Off                ;
+; Report Parameter Settings                                                  ; On                 ; On                 ;
+; Report Source Assignments                                                  ; On                 ; On                 ;
+; Report Connectivity Checks                                                 ; On                 ; On                 ;
+; Ignore Maximum Fan-Out Assignments                                         ; Off                ; Off                ;
+; Synchronization Register Chain Length                                      ; 2                  ; 2                  ;
+; PowerPlay Power Optimization                                               ; Normal compilation ; Normal compilation ;
+; HDL message level                                                          ; Level2             ; Level2             ;
+; Suppress Register Optimization Related Messages                            ; Off                ; Off                ;
+; Number of Removed Registers Reported in Synthesis Report                   ; 5000               ; 5000               ;
+; Number of Swept Nodes Reported in Synthesis Report                         ; 5000               ; 5000               ;
+; Number of Inverted Registers Reported in Synthesis Report                  ; 100                ; 100                ;
+; Clock MUX Protection                                                       ; On                 ; On                 ;
+; Auto Gated Clock Conversion                                                ; Off                ; Off                ;
+; Block Design Naming                                                        ; Auto               ; Auto               ;
+; SDC constraint protection                                                  ; Off                ; Off                ;
+; Synthesis Effort                                                           ; Auto               ; Auto               ;
+; Shift Register Replacement - Allow Asynchronous Clear Signal               ; On                 ; On                 ;
+; Pre-Mapping Resynthesis Optimization                                       ; Off                ; Off                ;
+; Analysis & Synthesis Message Level                                         ; Medium             ; Medium             ;
+; Disable Register Merging Across Hierarchies                                ; Auto               ; Auto               ;
+; Resource Aware Inference For Block RAM                                     ; On                 ; On                 ;
+; Synthesis Seed                                                             ; 1                  ; 1                  ;
++----------------------------------------------------------------------------+--------------------+--------------------+
+
+
++------------------------------------------+
+; Parallel Compilation                     ;
++----------------------------+-------------+
+; Processors                 ; Number      ;
++----------------------------+-------------+
+; Number detected on machine ; 4           ;
+; Maximum allowed            ; 2           ;
+;                            ;             ;
+; Average used               ; 1.00        ;
+; Maximum used               ; 1           ;
+;                            ;             ;
+; Usage by Processor         ; % Time Used ;
+;     Processor 1            ; 100.0%      ;
+;     Processors 2-4         ;   0.0%      ;
++----------------------------+-------------+
+
+
++-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Analysis & Synthesis Source Files Read                                                                                                                                                                                              ;
++------------------------------------------------------+-----------------+-------------------------------------------------------+------------------------------------------------------------------------------------------+---------+
+; File Name with User-Entered Path                     ; Used in Netlist ; File Type                                             ; File Name with Absolute Path                                                             ; Library ;
++------------------------------------------------------+-----------------+-------------------------------------------------------+------------------------------------------------------------------------------------------+---------+
+; Baud_Counter.v                                       ; yes             ; User Verilog HDL File                                 ; H:/4th-Year/FYP_Q/rs232lab/rs232lab/Baud_Counter.v                                       ;         ;
+; LCD_Display.v                                        ; yes             ; User Verilog HDL File                                 ; H:/4th-Year/FYP_Q/rs232lab/rs232lab/LCD_Display.v                                        ;         ;
+; LCD_display_string.v                                 ; yes             ; User Verilog HDL File                                 ; H:/4th-Year/FYP_Q/rs232lab/rs232lab/LCD_display_string.v                                 ;         ;
+; reset_delay.v                                        ; yes             ; User Verilog HDL File                                 ; H:/4th-Year/FYP_Q/rs232lab/rs232lab/reset_delay.v                                        ;         ;
+; RS232_Out.v                                          ; yes             ; User Verilog HDL File                                 ; H:/4th-Year/FYP_Q/rs232lab/rs232lab/RS232_Out.v                                          ;         ;
+; rs232lab.v                                           ; yes             ; User Verilog HDL File                                 ; H:/4th-Year/FYP_Q/rs232lab/rs232lab/rs232lab.v                                           ;         ;
+; romtext.v                                            ; yes             ; User Wizard-Generated File                            ; H:/4th-Year/FYP_Q/rs232lab/rs232lab/romtext.v                                            ;         ;
+; oneshot.v                                            ; yes             ; User Verilog HDL File                                 ; H:/4th-Year/FYP_Q/rs232lab/rs232lab/oneshot.v                                            ;         ;
+; transmitter.v                                        ; yes             ; User Verilog HDL File                                 ; H:/4th-Year/FYP_Q/rs232lab/rs232lab/transmitter.v                                        ;         ;
+; reciever.v                                           ; yes             ; User Verilog HDL File                                 ; H:/4th-Year/FYP_Q/rs232lab/rs232lab/reciever.v                                           ;         ;
+; baud_rate_gen.v                                      ; yes             ; User Verilog HDL File                                 ; H:/4th-Year/FYP_Q/rs232lab/rs232lab/baud_rate_gen.v                                      ;         ;
+; spinn_driver.v                                       ; yes             ; User Verilog HDL File                                 ; H:/4th-Year/FYP_Q/rs232lab/rs232lab/spinn_driver.v                                       ;         ;
+; spio_spinnaker_link_sync.v                           ; yes             ; User Verilog HDL File                                 ; H:/4th-Year/FYP_Q/rs232lab/rs232lab/spio_spinnaker_link_sync.v                           ;         ;
+; altsyncram.tdf                                       ; yes             ; Megafunction                                          ; c:/altera/13.0sp1/quartus/libraries/megafunctions/altsyncram.tdf                         ;         ;
+; stratix_ram_block.inc                                ; yes             ; Megafunction                                          ; c:/altera/13.0sp1/quartus/libraries/megafunctions/stratix_ram_block.inc                  ;         ;
+; lpm_mux.inc                                          ; yes             ; Megafunction                                          ; c:/altera/13.0sp1/quartus/libraries/megafunctions/lpm_mux.inc                            ;         ;
+; lpm_decode.inc                                       ; yes             ; Megafunction                                          ; c:/altera/13.0sp1/quartus/libraries/megafunctions/lpm_decode.inc                         ;         ;
+; aglobal130.inc                                       ; yes             ; Megafunction                                          ; c:/altera/13.0sp1/quartus/libraries/megafunctions/aglobal130.inc                         ;         ;
+; a_rdenreg.inc                                        ; yes             ; Megafunction                                          ; c:/altera/13.0sp1/quartus/libraries/megafunctions/a_rdenreg.inc                          ;         ;
+; altrom.inc                                           ; yes             ; Megafunction                                          ; c:/altera/13.0sp1/quartus/libraries/megafunctions/altrom.inc                             ;         ;
+; altram.inc                                           ; yes             ; Megafunction                                          ; c:/altera/13.0sp1/quartus/libraries/megafunctions/altram.inc                             ;         ;
+; altdpram.inc                                         ; yes             ; Megafunction                                          ; c:/altera/13.0sp1/quartus/libraries/megafunctions/altdpram.inc                           ;         ;
+; db/altsyncram_gk71.tdf                               ; yes             ; Auto-Generated Megafunction                           ; H:/4th-Year/FYP_Q/rs232lab/rs232lab/db/altsyncram_gk71.tdf                               ;         ;
+; text.mif                                             ; yes             ; Auto-Found Memory Initialization File                 ; H:/4th-Year/FYP_Q/rs232lab/rs232lab/text.mif                                             ;         ;
+; hex_7seg.v                                           ; yes             ; Auto-Found Verilog HDL File                           ; H:/4th-Year/FYP_Q/rs232lab/rs232lab/hex_7seg.v                                           ;         ;
+; db/altsyncram_auj1.tdf                               ; yes             ; Auto-Generated Megafunction                           ; H:/4th-Year/FYP_Q/rs232lab/rs232lab/db/altsyncram_auj1.tdf                               ;         ;
+; db/rs232lab.ram0_lcd_display_string_8e8bc469.hdl.mif ; yes             ; Auto-Generated Auto-Found Memory Initialization File  ; H:/4th-Year/FYP_Q/rs232lab/rs232lab/db/rs232lab.ram0_lcd_display_string_8e8bc469.hdl.mif ;         ;
++------------------------------------------------------+-----------------+-------------------------------------------------------+------------------------------------------------------------------------------------------+---------+
+
+
++--------------------------------------------------------+
+; Analysis & Synthesis Resource Usage Summary            ;
++---------------------------------------------+----------+
+; Resource                                    ; Usage    ;
++---------------------------------------------+----------+
+; Estimated Total logic elements              ; 531      ;
+;                                             ;          ;
+; Total combinational functions               ; 483      ;
+; Logic element usage by number of LUT inputs ;          ;
+;     -- 4 input functions                    ; 212      ;
+;     -- 3 input functions                    ; 82       ;
+;     -- <=2 input functions                  ; 189      ;
+;                                             ;          ;
+; Logic elements by mode                      ;          ;
+;     -- normal mode                          ; 382      ;
+;     -- arithmetic mode                      ; 101      ;
+;                                             ;          ;
+; Total registers                             ; 287      ;
+;     -- Dedicated logic registers            ; 287      ;
+;     -- I/O registers                        ; 0        ;
+;                                             ;          ;
+; I/O pins                                    ; 193      ;
+; Total memory bits                           ; 256      ;
+; Embedded Multiplier 9-bit elements          ; 0        ;
+; Maximum fan-out node                        ; CLOCK_50 ;
+; Maximum fan-out                             ; 243      ;
+; Total fan-out                               ; 2531     ;
+; Average fan-out                             ; 2.61     ;
++---------------------------------------------+----------+
+
+
++-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Analysis & Synthesis Resource Utilization by Entity                                                                                                                                                                                                       ;
++-------------------------------------------+-------------------+--------------+-------------+--------------+---------+-----------+------+--------------+------------------------------------------------------------------------------------+--------------+
+; Compilation Hierarchy Node                ; LC Combinationals ; LC Registers ; Memory Bits ; DSP Elements ; DSP 9x9 ; DSP 18x18 ; Pins ; Virtual Pins ; Full Hierarchy Name                                                                ; Library Name ;
++-------------------------------------------+-------------------+--------------+-------------+--------------+---------+-----------+------+--------------+------------------------------------------------------------------------------------+--------------+
+; |rs232lab                                 ; 483 (94)          ; 287 (43)     ; 256         ; 0            ; 0       ; 0         ; 193  ; 0            ; |rs232lab                                                                          ; work         ;
+;    |LCD_Display:u1|                       ; 97 (97)           ; 60 (60)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |rs232lab|LCD_Display:u1                                                           ; work         ;
+;    |LCD_display_string:d|                 ; 5 (5)             ; 13 (13)      ; 256         ; 0            ; 0       ; 0         ; 0    ; 0            ; |rs232lab|LCD_display_string:d                                                     ; work         ;
+;       |altsyncram:mem_rtl_0|              ; 0 (0)             ; 0 (0)        ; 256         ; 0            ; 0       ; 0         ; 0    ; 0            ; |rs232lab|LCD_display_string:d|altsyncram:mem_rtl_0                                ; work         ;
+;          |altsyncram_auj1:auto_generated| ; 0 (0)             ; 0 (0)        ; 256         ; 0            ; 0       ; 0         ; 0    ; 0            ; |rs232lab|LCD_display_string:d|altsyncram:mem_rtl_0|altsyncram_auj1:auto_generated ; work         ;
+;    |RS232_Out:u2|                         ; 37 (14)           ; 26 (11)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |rs232lab|RS232_Out:u2                                                             ; work         ;
+;       |Baud_Counter:Out_Counter|          ; 23 (23)           ; 15 (15)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |rs232lab|RS232_Out:u2|Baud_Counter:Out_Counter                                    ; work         ;
+;    |Reset_Delay:r0|                       ; 28 (28)           ; 21 (21)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |rs232lab|Reset_Delay:r0                                                           ; work         ;
+;    |baud_rate_gen:uart_baud|              ; 29 (29)           ; 14 (14)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |rs232lab|baud_rate_gen:uart_baud                                                  ; work         ;
+;    |hex_7seg:seg3|                        ; 7 (7)             ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |rs232lab|hex_7seg:seg3                                                            ; work         ;
+;    |oneshot:trig|                         ; 2 (2)             ; 2 (2)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |rs232lab|oneshot:trig                                                             ; work         ;
+;    |receiver:uart_rx|                     ; 53 (53)           ; 52 (52)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |rs232lab|receiver:uart_rx                                                         ; work         ;
+;    |spinn_driver:driv|                    ; 110 (110)         ; 40 (40)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |rs232lab|spinn_driver:driv                                                        ; work         ;
+;    |spio_spinnaker_link_sync:sync|        ; 0 (0)             ; 2 (2)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |rs232lab|spio_spinnaker_link_sync:sync                                            ; work         ;
+;    |transmitter:uart_tx|                  ; 21 (21)           ; 14 (14)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |rs232lab|transmitter:uart_tx                                                      ; work         ;
++-------------------------------------------+-------------------+--------------+-------------+--------------+---------+-----------+------+--------------+------------------------------------------------------------------------------------+--------------+
+Note: For table entries with two numbers listed, the numbers in parentheses indicate the number of resources of the given type used by the specific entity alone. The numbers listed outside of parentheses indicate the total resources of the given type used by the specific entity and all of its sub-entities in the hierarchy.
+
+
++-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Analysis & Synthesis RAM Summary                                                                                                                                                                                                        ;
++-------------------------------------------------------------------------------------+------+------------------+--------------+--------------+--------------+--------------+------+------------------------------------------------------+
+; Name                                                                                ; Type ; Mode             ; Port A Depth ; Port A Width ; Port B Depth ; Port B Width ; Size ; MIF                                                  ;
++-------------------------------------------------------------------------------------+------+------------------+--------------+--------------+--------------+--------------+------+------------------------------------------------------+
+; LCD_display_string:d|altsyncram:mem_rtl_0|altsyncram_auj1:auto_generated|ALTSYNCRAM ; AUTO ; Simple Dual Port ; 32           ; 8            ; 32           ; 8            ; 256  ; db/rs232lab.ram0_LCD_display_string_8e8bc469.hdl.mif ;
++-------------------------------------------------------------------------------------+------+------------------+--------------+--------------+--------------+--------------+------+------------------------------------------------------+
+
+
++----------------------------------------------------------------------------------------------------------------------------------------+
+; Analysis & Synthesis IP Cores Summary                                                                                                  ;
++--------+--------------+---------+--------------+--------------+------------------------+-----------------------------------------------+
+; Vendor ; IP Core Name ; Version ; Release Date ; License Type ; Entity Instance        ; IP Include File                               ;
++--------+--------------+---------+--------------+--------------+------------------------+-----------------------------------------------+
+; Altera ; ROM: 1-PORT  ; 9.0     ; N/A          ; N/A          ; |rs232lab|romtext:mem1 ; H:/4th-Year/FYP_Q/rs232lab/rs232lab/romtext.v ;
++--------+--------------+---------+--------------+--------------+------------------------+-----------------------------------------------+
+
+
+Encoding Type:  One-Hot
++-------------------------------------------------------------------------+
+; State Machine - |rs232lab|state                                         ;
++-----------------+-----------+------------+-----------------+------------+
+; Name            ; state.000 ; state.IDLE ; state.TXD_START ; state.STOP ;
++-----------------+-----------+------------+-----------------+------------+
+; state.STOP      ; 0         ; 0          ; 0               ; 0          ;
+; state.TXD_START ; 0         ; 0          ; 1               ; 1          ;
+; state.IDLE      ; 0         ; 1          ; 0               ; 1          ;
+; state.000       ; 1         ; 0          ; 0               ; 1          ;
++-----------------+-----------+------------+-----------------+------------+
+
+
+Encoding Type:  One-Hot
++------------------------------------------------------------------------------+
+; State Machine - |rs232lab|spinn_driver:driv|state                            ;
++---------------+---------------+--------------+---------------+---------------+
+; Name          ; state.PARK_ST ; state.EOP_ST ; state.TRAN_ST ; state.IDLE_ST ;
++---------------+---------------+--------------+---------------+---------------+
+; state.IDLE_ST ; 0             ; 0            ; 0             ; 0             ;
+; state.TRAN_ST ; 0             ; 0            ; 1             ; 1             ;
+; state.EOP_ST  ; 0             ; 1            ; 0             ; 1             ;
+; state.PARK_ST ; 1             ; 0            ; 0             ; 1             ;
++---------------+---------------+--------------+---------------+---------------+
+
+
+Encoding Type:  One-Hot
++---------------------------------------------------------------------------------------+
+; State Machine - |rs232lab|receiver:uart_rx|spinn_state                                ;
++---------------------+---------------------+---------------------+---------------------+
+; Name                ; spinn_state.IDLE_ST ; spinn_state.DUMP_ST ; spinn_state.WTRQ_ST ;
++---------------------+---------------------+---------------------+---------------------+
+; spinn_state.IDLE_ST ; 0                   ; 0                   ; 0                   ;
+; spinn_state.WTRQ_ST ; 1                   ; 0                   ; 1                   ;
+; spinn_state.DUMP_ST ; 1                   ; 1                   ; 0                   ;
++---------------------+---------------------+---------------------+---------------------+
+
+
+Encoding Type:  One-Hot
++-----------------------------------------------------------------------------------------+
+; State Machine - |rs232lab|receiver:uart_rx|state                                        ;
++----------------------+----------------------+---------------------+---------------------+
+; Name                 ; state.RX_STATE_START ; state.RX_STATE_STOP ; state.RX_STATE_DATA ;
++----------------------+----------------------+---------------------+---------------------+
+; state.RX_STATE_START ; 0                    ; 0                   ; 0                   ;
+; state.RX_STATE_DATA  ; 1                    ; 0                   ; 1                   ;
+; state.RX_STATE_STOP  ; 1                    ; 1                   ; 0                   ;
++----------------------+----------------------+---------------------+---------------------+
+
+
+Encoding Type:  One-Hot
++------------------------------------------------------------------------------------------------+
+; State Machine - |rs232lab|transmitter:uart_tx|state                                            ;
++-------------------+------------------+------------------+-------------------+------------------+
+; Name              ; state.STATE_STOP ; state.STATE_DATA ; state.STATE_START ; state.STATE_IDLE ;
++-------------------+------------------+------------------+-------------------+------------------+
+; state.STATE_IDLE  ; 0                ; 0                ; 0                 ; 0                ;
+; state.STATE_START ; 0                ; 0                ; 1                 ; 1                ;
+; state.STATE_DATA  ; 0                ; 1                ; 0                 ; 1                ;
+; state.STATE_STOP  ; 1                ; 0                ; 0                 ; 1                ;
++-------------------+------------------+------------------+-------------------+------------------+
+
+
+Encoding Type:  One-Hot
++--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; State Machine - |rs232lab|LCD_Display:u1|next_command                                                                                                                                                                                                                                ;
++----------------------------+----------------------------+--------------------------+---------------------+---------------------+--------------------------+--------------------+---------------------------+-----------------------+-------------------------+-----------------------+
+; Name                       ; next_command.DISPLAY_CLEAR ; next_command.DISPLAY_OFF ; next_command.RESET3 ; next_command.RESET2 ; next_command.RETURN_HOME ; next_command.LINE2 ; next_command.Print_String ; next_command.MODE_SET ; next_command.DISPLAY_ON ; next_command.FUNC_SET ;
++----------------------------+----------------------------+--------------------------+---------------------+---------------------+--------------------------+--------------------+---------------------------+-----------------------+-------------------------+-----------------------+
+; next_command.FUNC_SET      ; 0                          ; 0                        ; 0                   ; 0                   ; 0                        ; 0                  ; 0                         ; 0                     ; 0                       ; 0                     ;
+; next_command.DISPLAY_ON    ; 0                          ; 0                        ; 0                   ; 0                   ; 0                        ; 0                  ; 0                         ; 0                     ; 1                       ; 1                     ;
+; next_command.MODE_SET      ; 0                          ; 0                        ; 0                   ; 0                   ; 0                        ; 0                  ; 0                         ; 1                     ; 0                       ; 1                     ;
+; next_command.Print_String  ; 0                          ; 0                        ; 0                   ; 0                   ; 0                        ; 0                  ; 1                         ; 0                     ; 0                       ; 1                     ;
+; next_command.LINE2         ; 0                          ; 0                        ; 0                   ; 0                   ; 0                        ; 1                  ; 0                         ; 0                     ; 0                       ; 1                     ;
+; next_command.RETURN_HOME   ; 0                          ; 0                        ; 0                   ; 0                   ; 1                        ; 0                  ; 0                         ; 0                     ; 0                       ; 1                     ;
+; next_command.RESET2        ; 0                          ; 0                        ; 0                   ; 1                   ; 0                        ; 0                  ; 0                         ; 0                     ; 0                       ; 1                     ;
+; next_command.RESET3        ; 0                          ; 0                        ; 1                   ; 0                   ; 0                        ; 0                  ; 0                         ; 0                     ; 0                       ; 1                     ;
+; next_command.DISPLAY_OFF   ; 0                          ; 1                        ; 0                   ; 0                   ; 0                        ; 0                  ; 0                         ; 0                     ; 0                       ; 1                     ;
+; next_command.DISPLAY_CLEAR ; 1                          ; 0                        ; 0                   ; 0                   ; 0                        ; 0                  ; 0                         ; 0                     ; 0                       ; 1                     ;
++----------------------------+----------------------------+--------------------------+---------------------+---------------------+--------------------------+--------------------+---------------------------+-----------------------+-------------------------+-----------------------+
+
+
+Encoding Type:  One-Hot
++--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; State Machine - |rs232lab|LCD_Display:u1|state                                                                                                                                                                                                         ;
++---------------------+---------------------+-------------------+--------------+--------------+------------+------------------+-------------------+-------------+--------------------+----------------+------------------+----------------+--------------+
+; Name                ; state.DISPLAY_CLEAR ; state.DISPLAY_OFF ; state.RESET3 ; state.RESET2 ; state.HOLD ; state.DROP_LCD_E ; state.RETURN_HOME ; state.LINE2 ; state.Print_String ; state.MODE_SET ; state.DISPLAY_ON ; state.FUNC_SET ; state.RESET1 ;
++---------------------+---------------------+-------------------+--------------+--------------+------------+------------------+-------------------+-------------+--------------------+----------------+------------------+----------------+--------------+
+; state.RESET1        ; 0                   ; 0                 ; 0            ; 0            ; 0          ; 0                ; 0                 ; 0           ; 0                  ; 0              ; 0                ; 0              ; 0            ;
+; state.FUNC_SET      ; 0                   ; 0                 ; 0            ; 0            ; 0          ; 0                ; 0                 ; 0           ; 0                  ; 0              ; 0                ; 1              ; 1            ;
+; state.DISPLAY_ON    ; 0                   ; 0                 ; 0            ; 0            ; 0          ; 0                ; 0                 ; 0           ; 0                  ; 0              ; 1                ; 0              ; 1            ;
+; state.MODE_SET      ; 0                   ; 0                 ; 0            ; 0            ; 0          ; 0                ; 0                 ; 0           ; 0                  ; 1              ; 0                ; 0              ; 1            ;
+; state.Print_String  ; 0                   ; 0                 ; 0            ; 0            ; 0          ; 0                ; 0                 ; 0           ; 1                  ; 0              ; 0                ; 0              ; 1            ;
+; state.LINE2         ; 0                   ; 0                 ; 0            ; 0            ; 0          ; 0                ; 0                 ; 1           ; 0                  ; 0              ; 0                ; 0              ; 1            ;
+; state.RETURN_HOME   ; 0                   ; 0                 ; 0            ; 0            ; 0          ; 0                ; 1                 ; 0           ; 0                  ; 0              ; 0                ; 0              ; 1            ;
+; state.DROP_LCD_E    ; 0                   ; 0                 ; 0            ; 0            ; 0          ; 1                ; 0                 ; 0           ; 0                  ; 0              ; 0                ; 0              ; 1            ;
+; state.HOLD          ; 0                   ; 0                 ; 0            ; 0            ; 1          ; 0                ; 0                 ; 0           ; 0                  ; 0              ; 0                ; 0              ; 1            ;
+; state.RESET2        ; 0                   ; 0                 ; 0            ; 1            ; 0          ; 0                ; 0                 ; 0           ; 0                  ; 0              ; 0                ; 0              ; 1            ;
+; state.RESET3        ; 0                   ; 0                 ; 1            ; 0            ; 0          ; 0                ; 0                 ; 0           ; 0                  ; 0              ; 0                ; 0              ; 1            ;
+; state.DISPLAY_OFF   ; 0                   ; 1                 ; 0            ; 0            ; 0          ; 0                ; 0                 ; 0           ; 0                  ; 0              ; 0                ; 0              ; 1            ;
+; state.DISPLAY_CLEAR ; 1                   ; 0                 ; 0            ; 0            ; 0          ; 0                ; 0                 ; 0           ; 0                  ; 0              ; 0                ; 0              ; 1            ;
++---------------------+---------------------+-------------------+--------------+--------------+------------+------------------+-------------------+-------------+--------------------+----------------+------------------+----------------+--------------+
+
+
++------------------------------------------------------------------------------------------------+
+; Registers Removed During Synthesis                                                             ;
++---------------------------------------------------+--------------------------------------------+
+; Register name                                     ; Reason for Removal                         ;
++---------------------------------------------------+--------------------------------------------+
+; transmit_addr[0..7]                               ; Lost fanout                                ;
+; receiver:uart_rx|spinn_pkt[1..7,17..22,25,27..39] ; Stuck at GND due to stuck port data_in     ;
+; LCD_Display:u1|LCD_RW_INT                         ; Stuck at GND due to stuck port data_in     ;
+; tbyte[7]                                          ; Merged with tbyte[4]                       ;
+; spinn_driver:driv|pkt_buf[37..39]                 ; Merged with spinn_driver:driv|pkt_buf[36]  ;
+; spinn_driver:driv|pkt_buf[33..35]                 ; Merged with spinn_driver:driv|pkt_buf[32]  ;
+; spinn_driver:driv|pkt_buf[29..31]                 ; Merged with spinn_driver:driv|pkt_buf[28]  ;
+; spinn_driver:driv|pkt_buf[27]                     ; Merged with spinn_driver:driv|pkt_buf[25]  ;
+; spinn_driver:driv|pkt_buf[26]                     ; Merged with spinn_driver:driv|pkt_buf[24]  ;
+; spinn_driver:driv|pkt_buf[22]                     ; Merged with spinn_driver:driv|pkt_buf[20]  ;
+; receiver:uart_rx|spinn_pkt[24,26]                 ; Merged with receiver:uart_rx|spinn_pkt[23] ;
+; transmitter:uart_tx|data[7]                       ; Merged with transmitter:uart_tx|data[4]    ;
+; receiver:uart_rx|count[1]                         ; Stuck at GND due to stuck port data_in     ;
+; state~8                                           ; Lost fanout                                ;
+; state~9                                           ; Lost fanout                                ;
+; state~10                                          ; Lost fanout                                ;
+; spinn_driver:driv|state~4                         ; Lost fanout                                ;
+; spinn_driver:driv|state~5                         ; Lost fanout                                ;
+; transmitter:uart_tx|state~5                       ; Lost fanout                                ;
+; transmitter:uart_tx|state~6                       ; Lost fanout                                ;
+; LCD_Display:u1|next_command~2                     ; Lost fanout                                ;
+; LCD_Display:u1|next_command~3                     ; Lost fanout                                ;
+; LCD_Display:u1|next_command~4                     ; Lost fanout                                ;
+; LCD_Display:u1|next_command~5                     ; Lost fanout                                ;
+; LCD_Display:u1|state~14                           ; Lost fanout                                ;
+; LCD_Display:u1|state~15                           ; Lost fanout                                ;
+; LCD_Display:u1|state~16                           ; Lost fanout                                ;
+; LCD_Display:u1|state~17                           ; Lost fanout                                ;
+; tbyte[4]                                          ; Stuck at GND due to stuck port data_in     ;
+; spinn_driver:driv|pkt_buf[36]                     ; Stuck at GND due to stuck port data_in     ;
+; transmitter:uart_tx|data[4]                       ; Stuck at GND due to stuck port data_in     ;
+; spinn_driver:driv|pkt_buf[17,21,25,28,32]         ; Stuck at GND due to stuck port data_in     ;
+; spinn_driver:driv|pkt_buf[24]                     ; Merged with spinn_driver:driv|pkt_buf[23]  ;
+; Total Number of Removed Registers = 77            ;                                            ;
++---------------------------------------------------+--------------------------------------------+
+
+
++-----------------------------------------------------------------------------------------------------+
+; Removed Registers Triggering Further Register Optimizations                                         ;
++--------------------------------+---------------------------+----------------------------------------+
+; Register name                  ; Reason for Removal        ; Registers Removed due to This Register ;
++--------------------------------+---------------------------+----------------------------------------+
+; receiver:uart_rx|spinn_pkt[36] ; Stuck at GND              ; spinn_driver:driv|pkt_buf[32]          ;
+;                                ; due to stuck port data_in ;                                        ;
+; receiver:uart_rx|spinn_pkt[32] ; Stuck at GND              ; spinn_driver:driv|pkt_buf[28]          ;
+;                                ; due to stuck port data_in ;                                        ;
+; receiver:uart_rx|spinn_pkt[29] ; Stuck at GND              ; spinn_driver:driv|pkt_buf[25]          ;
+;                                ; due to stuck port data_in ;                                        ;
+; receiver:uart_rx|spinn_pkt[25] ; Stuck at GND              ; spinn_driver:driv|pkt_buf[21]          ;
+;                                ; due to stuck port data_in ;                                        ;
+; receiver:uart_rx|spinn_pkt[21] ; Stuck at GND              ; spinn_driver:driv|pkt_buf[17]          ;
+;                                ; due to stuck port data_in ;                                        ;
+; tbyte[4]                       ; Stuck at GND              ; transmitter:uart_tx|data[4]            ;
+;                                ; due to stuck port data_in ;                                        ;
++--------------------------------+---------------------------+----------------------------------------+
+
+
++------------------------------------------------------+
+; General Register Statistics                          ;
++----------------------------------------------+-------+
+; Statistic                                    ; Value ;
++----------------------------------------------+-------+
+; Total registers                              ; 287   ;
+; Number of registers using Synchronous Clear  ; 36    ;
+; Number of registers using Synchronous Load   ; 13    ;
+; Number of registers using Asynchronous Clear ; 127   ;
+; Number of registers using Asynchronous Load  ; 0     ;
+; Number of registers using Clock Enable       ; 157   ;
+; Number of registers using Preset             ; 0     ;
++----------------------------------------------+-------+
+
+
++---------------------------------------------------+
+; Inverted Register Statistics                      ;
++-----------------------------------------+---------+
+; Inverted Register                       ; Fan out ;
++-----------------------------------------+---------+
+; spinn_driver:driv|PKT_RDY_OUT           ; 8       ;
+; RS232_Out:u2|serial_data_out            ; 1       ;
+; RS232_Out:u2|data_out_shift_reg[0]      ; 1       ;
+; RS232_Out:u2|data_out_shift_reg[1]      ; 1       ;
+; transmitter:uart_tx|tx                  ; 2       ;
+; RS232_Out:u2|data_out_shift_reg[2]      ; 1       ;
+; RS232_Out:u2|data_out_shift_reg[3]      ; 1       ;
+; RS232_Out:u2|data_out_shift_reg[4]      ; 1       ;
+; RS232_Out:u2|data_out_shift_reg[5]      ; 1       ;
+; RS232_Out:u2|data_out_shift_reg[6]      ; 1       ;
+; RS232_Out:u2|data_out_shift_reg[7]      ; 1       ;
+; RS232_Out:u2|data_out_shift_reg[8]      ; 2       ;
+; Total number of inverted registers = 12 ;         ;
++-----------------------------------------+---------+
+
+
++-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Multiplexer Restructuring Statistics (Restructuring Performed)                                                                                                                ;
++--------------------+-----------+---------------+----------------------+------------------------+------------+-----------------------------------------------------------------+
+; Multiplexer Inputs ; Bus Width ; Baseline Area ; Area if Restructured ; Saving if Restructured ; Registered ; Example Multiplexer Output                                      ;
++--------------------+-----------+---------------+----------------------+------------------------+------------+-----------------------------------------------------------------+
+; 3:1                ; 4 bits    ; 8 LEs         ; 4 LEs                ; 4 LEs                  ; Yes        ; |rs232lab|spinn_driver:driv|symbol_cnt[3]                       ;
+; 4:1                ; 9 bits    ; 18 LEs        ; 9 LEs                ; 9 LEs                  ; Yes        ; |rs232lab|RS232_Out:u2|Baud_Counter:Out_Counter|baud_counter[1] ;
+; 5:1                ; 4 bits    ; 12 LEs        ; 4 LEs                ; 8 LEs                  ; Yes        ; |rs232lab|RS232_Out:u2|Baud_Counter:Out_Counter|bit_counter[2]  ;
+; 4:1                ; 36 bits   ; 72 LEs        ; 36 LEs               ; 36 LEs                 ; Yes        ; |rs232lab|byteN[9]                                              ;
+; 5:1                ; 4 bits    ; 12 LEs        ; 4 LEs                ; 8 LEs                  ; Yes        ; |rs232lab|receiver:uart_rx|bitpos[0]                            ;
+; 6:1                ; 2 bits    ; 8 LEs         ; 4 LEs                ; 4 LEs                  ; Yes        ; |rs232lab|tbyte[1]                                              ;
+; 5:1                ; 16 bits   ; 48 LEs        ; 32 LEs               ; 16 LEs                 ; Yes        ; |rs232lab|spinn_driver:driv|pkt_buf[23]                         ;
+; 5:1                ; 6 bits    ; 18 LEs        ; 12 LEs               ; 6 LEs                  ; Yes        ; |rs232lab|spinn_driver:driv|pkt_buf[19]                         ;
+; 6:1                ; 4 bits    ; 16 LEs        ; 4 LEs                ; 12 LEs                 ; Yes        ; |rs232lab|receiver:uart_rx|sample[2]                            ;
+; 6:1                ; 3 bits    ; 12 LEs        ; 3 LEs                ; 9 LEs                  ; Yes        ; |rs232lab|transmitter:uart_tx|bitpos[1]                         ;
+; 7:1                ; 5 bits    ; 20 LEs        ; 10 LEs               ; 10 LEs                 ; Yes        ; |rs232lab|spinn_driver:driv|pkt_buf[11]                         ;
+; 4:1                ; 8 bits    ; 16 LEs        ; 16 LEs               ; 0 LEs                  ; Yes        ; |rs232lab|RS232_Out:u2|data_out_shift_reg[3]                    ;
+; 5:1                ; 2 bits    ; 6 LEs         ; 6 LEs                ; 0 LEs                  ; Yes        ; |rs232lab|LCD_Display:u1|DATA_BUS_VALUE[4]                      ;
+; 3:1                ; 2 bits    ; 4 LEs         ; 2 LEs                ; 2 LEs                  ; No         ; |rs232lab|state                                                 ;
+; 3:1                ; 2 bits    ; 4 LEs         ; 4 LEs                ; 0 LEs                  ; No         ; |rs232lab|receiver:uart_rx|Selector19                           ;
+; 6:1                ; 2 bits    ; 8 LEs         ; 4 LEs                ; 4 LEs                  ; No         ; |rs232lab|state                                                 ;
+; 7:1                ; 3 bits    ; 12 LEs        ; 6 LEs                ; 6 LEs                  ; No         ; |rs232lab|receiver:uart_rx|state                                ;
+; 7:1                ; 2 bits    ; 8 LEs         ; 4 LEs                ; 4 LEs                  ; No         ; |rs232lab|transmitter:uart_tx|Selector1                         ;
+; 9:1                ; 2 bits    ; 12 LEs        ; 4 LEs                ; 8 LEs                  ; No         ; |rs232lab|transmitter:uart_tx|Selector0                         ;
++--------------------+-----------+---------------+----------------------+------------------------+------------+-----------------------------------------------------------------+
+
+
++----------------------------------------------------------------------------------------------------+
+; Source assignments for romtext:mem1|altsyncram:altsyncram_component|altsyncram_gk71:auto_generated ;
++---------------------------------+--------------------+------+--------------------------------------+
+; Assignment                      ; Value              ; From ; To                                   ;
++---------------------------------+--------------------+------+--------------------------------------+
+; OPTIMIZE_POWER_DURING_SYNTHESIS ; NORMAL_COMPILATION ; -    ; -                                    ;
++---------------------------------+--------------------+------+--------------------------------------+
+
+
++-------------------------------------------------------------------------------------------------+
+; Source assignments for LCD_display_string:d|altsyncram:mem_rtl_0|altsyncram_auj1:auto_generated ;
++---------------------------------+--------------------+------+-----------------------------------+
+; Assignment                      ; Value              ; From ; To                                ;
++---------------------------------+--------------------+------+-----------------------------------+
+; OPTIMIZE_POWER_DURING_SYNTHESIS ; NORMAL_COMPILATION ; -    ; -                                 ;
++---------------------------------+--------------------+------+-----------------------------------+
+
+
++--------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: Top-level Entity: |rs232lab ;
++----------------+----------+----------------------------------------------+
+; Parameter Name ; Value    ; Type                                         ;
++----------------+----------+----------------------------------------------+
+; XMT_LIMIT      ; 01011111 ; Unsigned Binary                              ;
+; DATA_WIDTH     ; 8        ; Signed Integer                               ;
++----------------+----------+----------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++-------------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: romtext:mem1|altsyncram:altsyncram_component ;
++------------------------------------+----------------------+-------------------------------+
+; Parameter Name                     ; Value                ; Type                          ;
++------------------------------------+----------------------+-------------------------------+
+; BYTE_SIZE_BLOCK                    ; 8                    ; Untyped                       ;
+; AUTO_CARRY_CHAINS                  ; ON                   ; AUTO_CARRY                    ;
+; IGNORE_CARRY_BUFFERS               ; OFF                  ; IGNORE_CARRY                  ;
+; AUTO_CASCADE_CHAINS                ; ON                   ; AUTO_CASCADE                  ;
+; IGNORE_CASCADE_BUFFERS             ; OFF                  ; IGNORE_CASCADE                ;
+; WIDTH_BYTEENA                      ; 1                    ; Untyped                       ;
+; OPERATION_MODE                     ; ROM                  ; Untyped                       ;
+; WIDTH_A                            ; 8                    ; Signed Integer                ;
+; WIDTHAD_A                          ; 8                    ; Signed Integer                ;
+; NUMWORDS_A                         ; 256                  ; Signed Integer                ;
+; OUTDATA_REG_A                      ; UNREGISTERED         ; Untyped                       ;
+; ADDRESS_ACLR_A                     ; NONE                 ; Untyped                       ;
+; OUTDATA_ACLR_A                     ; NONE                 ; Untyped                       ;
+; WRCONTROL_ACLR_A                   ; NONE                 ; Untyped                       ;
+; INDATA_ACLR_A                      ; NONE                 ; Untyped                       ;
+; BYTEENA_ACLR_A                     ; NONE                 ; Untyped                       ;
+; WIDTH_B                            ; 1                    ; Untyped                       ;
+; WIDTHAD_B                          ; 1                    ; Untyped                       ;
+; NUMWORDS_B                         ; 1                    ; Untyped                       ;
+; INDATA_REG_B                       ; CLOCK1               ; Untyped                       ;
+; WRCONTROL_WRADDRESS_REG_B          ; CLOCK1               ; Untyped                       ;
+; RDCONTROL_REG_B                    ; CLOCK1               ; Untyped                       ;
+; ADDRESS_REG_B                      ; CLOCK1               ; Untyped                       ;
+; OUTDATA_REG_B                      ; UNREGISTERED         ; Untyped                       ;
+; BYTEENA_REG_B                      ; CLOCK1               ; Untyped                       ;
+; INDATA_ACLR_B                      ; NONE                 ; Untyped                       ;
+; WRCONTROL_ACLR_B                   ; NONE                 ; Untyped                       ;
+; ADDRESS_ACLR_B                     ; NONE                 ; Untyped                       ;
+; OUTDATA_ACLR_B                     ; NONE                 ; Untyped                       ;
+; RDCONTROL_ACLR_B                   ; NONE                 ; Untyped                       ;
+; BYTEENA_ACLR_B                     ; NONE                 ; Untyped                       ;
+; WIDTH_BYTEENA_A                    ; 1                    ; Signed Integer                ;
+; WIDTH_BYTEENA_B                    ; 1                    ; Untyped                       ;
+; RAM_BLOCK_TYPE                     ; AUTO                 ; Untyped                       ;
+; BYTE_SIZE                          ; 8                    ; Untyped                       ;
+; READ_DURING_WRITE_MODE_MIXED_PORTS ; DONT_CARE            ; Untyped                       ;
+; READ_DURING_WRITE_MODE_PORT_A      ; NEW_DATA_NO_NBE_READ ; Untyped                       ;
+; READ_DURING_WRITE_MODE_PORT_B      ; NEW_DATA_NO_NBE_READ ; Untyped                       ;
+; INIT_FILE                          ; text.mif             ; Untyped                       ;
+; INIT_FILE_LAYOUT                   ; PORT_A               ; Untyped                       ;
+; MAXIMUM_DEPTH                      ; 0                    ; Untyped                       ;
+; CLOCK_ENABLE_INPUT_A               ; BYPASS               ; Untyped                       ;
+; CLOCK_ENABLE_INPUT_B               ; NORMAL               ; Untyped                       ;
+; CLOCK_ENABLE_OUTPUT_A              ; BYPASS               ; Untyped                       ;
+; CLOCK_ENABLE_OUTPUT_B              ; NORMAL               ; Untyped                       ;
+; CLOCK_ENABLE_CORE_A                ; USE_INPUT_CLKEN      ; Untyped                       ;
+; CLOCK_ENABLE_CORE_B                ; USE_INPUT_CLKEN      ; Untyped                       ;
+; ENABLE_ECC                         ; FALSE                ; Untyped                       ;
+; ECC_PIPELINE_STAGE_ENABLED         ; FALSE                ; Untyped                       ;
+; WIDTH_ECCSTATUS                    ; 3                    ; Untyped                       ;
+; DEVICE_FAMILY                      ; Cyclone II           ; Untyped                       ;
+; CBXI_PARAMETER                     ; altsyncram_gk71      ; Untyped                       ;
++------------------------------------+----------------------+-------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++-------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: LCD_Display:u1 ;
++----------------+----------+---------------------------------+
+; Parameter Name ; Value    ; Type                            ;
++----------------+----------+---------------------------------+
+; HOLD           ; 0000     ; Unsigned Binary                 ;
+; FUNC_SET       ; 0001     ; Unsigned Binary                 ;
+; DISPLAY_ON     ; 0010     ; Unsigned Binary                 ;
+; MODE_SET       ; 0011     ; Unsigned Binary                 ;
+; Print_String   ; 0100     ; Unsigned Binary                 ;
+; LINE2          ; 0101     ; Unsigned Binary                 ;
+; RETURN_HOME    ; 0110     ; Unsigned Binary                 ;
+; DROP_LCD_E     ; 0111     ; Unsigned Binary                 ;
+; RESET1         ; 1000     ; Unsigned Binary                 ;
+; RESET2         ; 1001     ; Unsigned Binary                 ;
+; RESET3         ; 1010     ; Unsigned Binary                 ;
+; DISPLAY_OFF    ; 1011     ; Unsigned Binary                 ;
+; DISPLAY_CLEAR  ; 1100     ; Unsigned Binary                 ;
+; FORM_FEED      ; 00001100 ; Unsigned Binary                 ;
++----------------+----------+---------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++-----------------------------------------------------------+
+; Parameter Settings for User Entity Instance: RS232_Out:u2 ;
++----------------+-----------+------------------------------+
+; Parameter Name ; Value     ; Type                         ;
++----------------+-----------+------------------------------+
+; DATA_WIDTH     ; 8         ; Signed Integer               ;
+; BAUD_COUNT     ; 110110010 ; Unsigned Binary              ;
++----------------+-----------+------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: RS232_Out:u2|Baud_Counter:Out_Counter ;
++----------------------+----------------------------------+--------------------------+
+; Parameter Name       ; Value                            ; Type                     ;
++----------------------+----------------------------------+--------------------------+
+; BAUD_COUNTER_WIDTH   ; 9                                ; Signed Integer           ;
+; BAUD_COUNT           ; 110110010                        ; Unsigned Binary          ;
+; BAUD_TICK_COUNT      ; 00000000000000000000000110110001 ; Unsigned Binary          ;
+; HALF_BAUD_TICK_COUNT ; 00000000000000000000000011011001 ; Unsigned Binary          ;
+; DATA_WIDTH           ; 8                                ; Signed Integer           ;
+; TOTAL_DATA_WIDTH     ; 10                               ; Signed Integer           ;
++----------------------+----------------------------------+--------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++----------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: baud_rate_gen:uart_baud ;
++----------------+-------+---------------------------------------------+
+; Parameter Name ; Value ; Type                                        ;
++----------------+-------+---------------------------------------------+
+; RX_ACC_MAX     ; 27    ; Signed Integer                              ;
+; TX_ACC_MAX     ; 434   ; Signed Integer                              ;
+; RX_ACC_WIDTH   ; 5     ; Signed Integer                              ;
+; TX_ACC_WIDTH   ; 9     ; Signed Integer                              ;
++----------------+-------+---------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: transmitter:uart_tx ;
++----------------+-------+-----------------------------------------+
+; Parameter Name ; Value ; Type                                    ;
++----------------+-------+-----------------------------------------+
+; STATE_IDLE     ; 00    ; Unsigned Binary                         ;
+; STATE_START    ; 01    ; Unsigned Binary                         ;
+; STATE_DATA     ; 10    ; Unsigned Binary                         ;
+; STATE_STOP     ; 11    ; Unsigned Binary                         ;
++----------------+-------+-----------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++---------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: receiver:uart_rx ;
++----------------+-------+--------------------------------------+
+; Parameter Name ; Value ; Type                                 ;
++----------------+-------+--------------------------------------+
+; RX_STATE_START ; 00    ; Unsigned Binary                      ;
+; RX_STATE_DATA  ; 01    ; Unsigned Binary                      ;
+; RX_STATE_STOP  ; 10    ; Unsigned Binary                      ;
++----------------+-------+--------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++----------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: spio_spinnaker_link_sync:sync ;
++----------------+-------+---------------------------------------------------+
+; Parameter Name ; Value ; Type                                              ;
++----------------+-------+---------------------------------------------------+
+; SIZE           ; 1     ; Signed Integer                                    ;
++----------------+-------+---------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++------------------------------------------------------------------------------------------------------------+
+; Parameter Settings for Inferred Entity Instance: LCD_display_string:d|altsyncram:mem_rtl_0                 ;
++------------------------------------+------------------------------------------------------+----------------+
+; Parameter Name                     ; Value                                                ; Type           ;
++------------------------------------+------------------------------------------------------+----------------+
+; BYTE_SIZE_BLOCK                    ; 8                                                    ; Untyped        ;
+; AUTO_CARRY_CHAINS                  ; ON                                                   ; AUTO_CARRY     ;
+; IGNORE_CARRY_BUFFERS               ; OFF                                                  ; IGNORE_CARRY   ;
+; AUTO_CASCADE_CHAINS                ; ON                                                   ; AUTO_CASCADE   ;
+; IGNORE_CASCADE_BUFFERS             ; OFF                                                  ; IGNORE_CASCADE ;
+; WIDTH_BYTEENA                      ; 1                                                    ; Untyped        ;
+; OPERATION_MODE                     ; DUAL_PORT                                            ; Untyped        ;
+; WIDTH_A                            ; 8                                                    ; Untyped        ;
+; WIDTHAD_A                          ; 5                                                    ; Untyped        ;
+; NUMWORDS_A                         ; 32                                                   ; Untyped        ;
+; OUTDATA_REG_A                      ; UNREGISTERED                                         ; Untyped        ;
+; ADDRESS_ACLR_A                     ; NONE                                                 ; Untyped        ;
+; OUTDATA_ACLR_A                     ; NONE                                                 ; Untyped        ;
+; WRCONTROL_ACLR_A                   ; NONE                                                 ; Untyped        ;
+; INDATA_ACLR_A                      ; NONE                                                 ; Untyped        ;
+; BYTEENA_ACLR_A                     ; NONE                                                 ; Untyped        ;
+; WIDTH_B                            ; 8                                                    ; Untyped        ;
+; WIDTHAD_B                          ; 5                                                    ; Untyped        ;
+; NUMWORDS_B                         ; 32                                                   ; Untyped        ;
+; INDATA_REG_B                       ; CLOCK1                                               ; Untyped        ;
+; WRCONTROL_WRADDRESS_REG_B          ; CLOCK1                                               ; Untyped        ;
+; RDCONTROL_REG_B                    ; CLOCK1                                               ; Untyped        ;
+; ADDRESS_REG_B                      ; CLOCK1                                               ; Untyped        ;
+; OUTDATA_REG_B                      ; UNREGISTERED                                         ; Untyped        ;
+; BYTEENA_REG_B                      ; CLOCK1                                               ; Untyped        ;
+; INDATA_ACLR_B                      ; NONE                                                 ; Untyped        ;
+; WRCONTROL_ACLR_B                   ; NONE                                                 ; Untyped        ;
+; ADDRESS_ACLR_B                     ; NONE                                                 ; Untyped        ;
+; OUTDATA_ACLR_B                     ; NONE                                                 ; Untyped        ;
+; RDCONTROL_ACLR_B                   ; NONE                                                 ; Untyped        ;
+; BYTEENA_ACLR_B                     ; NONE                                                 ; Untyped        ;
+; WIDTH_BYTEENA_A                    ; 1                                                    ; Untyped        ;
+; WIDTH_BYTEENA_B                    ; 1                                                    ; Untyped        ;
+; RAM_BLOCK_TYPE                     ; AUTO                                                 ; Untyped        ;
+; BYTE_SIZE                          ; 8                                                    ; Untyped        ;
+; READ_DURING_WRITE_MODE_MIXED_PORTS ; DONT_CARE                                            ; Untyped        ;
+; READ_DURING_WRITE_MODE_PORT_A      ; NEW_DATA_NO_NBE_READ                                 ; Untyped        ;
+; READ_DURING_WRITE_MODE_PORT_B      ; NEW_DATA_NO_NBE_READ                                 ; Untyped        ;
+; INIT_FILE                          ; db/rs232lab.ram0_LCD_display_string_8e8bc469.hdl.mif ; Untyped        ;
+; INIT_FILE_LAYOUT                   ; PORT_A                                               ; Untyped        ;
+; MAXIMUM_DEPTH                      ; 0                                                    ; Untyped        ;
+; CLOCK_ENABLE_INPUT_A               ; NORMAL                                               ; Untyped        ;
+; CLOCK_ENABLE_INPUT_B               ; NORMAL                                               ; Untyped        ;
+; CLOCK_ENABLE_OUTPUT_A              ; NORMAL                                               ; Untyped        ;
+; CLOCK_ENABLE_OUTPUT_B              ; NORMAL                                               ; Untyped        ;
+; CLOCK_ENABLE_CORE_A                ; USE_INPUT_CLKEN                                      ; Untyped        ;
+; CLOCK_ENABLE_CORE_B                ; USE_INPUT_CLKEN                                      ; Untyped        ;
+; ENABLE_ECC                         ; FALSE                                                ; Untyped        ;
+; ECC_PIPELINE_STAGE_ENABLED         ; FALSE                                                ; Untyped        ;
+; WIDTH_ECCSTATUS                    ; 3                                                    ; Untyped        ;
+; DEVICE_FAMILY                      ; Cyclone II                                           ; Untyped        ;
+; CBXI_PARAMETER                     ; altsyncram_auj1                                      ; Untyped        ;
++------------------------------------+------------------------------------------------------+----------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++------------------------------------------------------------------------------------------+
+; altsyncram Parameter Settings by Entity Instance                                         ;
++-------------------------------------------+----------------------------------------------+
+; Name                                      ; Value                                        ;
++-------------------------------------------+----------------------------------------------+
+; Number of entity instances                ; 2                                            ;
+; Entity Instance                           ; romtext:mem1|altsyncram:altsyncram_component ;
+;     -- OPERATION_MODE                     ; ROM                                          ;
+;     -- WIDTH_A                            ; 8                                            ;
+;     -- NUMWORDS_A                         ; 256                                          ;
+;     -- OUTDATA_REG_A                      ; UNREGISTERED                                 ;
+;     -- WIDTH_B                            ; 1                                            ;
+;     -- NUMWORDS_B                         ; 1                                            ;
+;     -- ADDRESS_REG_B                      ; CLOCK1                                       ;
+;     -- OUTDATA_REG_B                      ; UNREGISTERED                                 ;
+;     -- RAM_BLOCK_TYPE                     ; AUTO                                         ;
+;     -- READ_DURING_WRITE_MODE_MIXED_PORTS ; DONT_CARE                                    ;
+; Entity Instance                           ; LCD_display_string:d|altsyncram:mem_rtl_0    ;
+;     -- OPERATION_MODE                     ; DUAL_PORT                                    ;
+;     -- WIDTH_A                            ; 8                                            ;
+;     -- NUMWORDS_A                         ; 32                                           ;
+;     -- OUTDATA_REG_A                      ; UNREGISTERED                                 ;
+;     -- WIDTH_B                            ; 8                                            ;
+;     -- NUMWORDS_B                         ; 32                                           ;
+;     -- ADDRESS_REG_B                      ; CLOCK1                                       ;
+;     -- OUTDATA_REG_B                      ; UNREGISTERED                                 ;
+;     -- RAM_BLOCK_TYPE                     ; AUTO                                         ;
+;     -- READ_DURING_WRITE_MODE_MIXED_PORTS ; DONT_CARE                                    ;
++-------------------------------------------+----------------------------------------------+
+
+
++-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Port Connectivity Checks: "hex_7seg:seg4"                                                                                                                                                                       ;
++-----------+-------+----------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Port      ; Type  ; Severity ; Details                                                                                                                                                                          ;
++-----------+-------+----------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; hex_digit ; Input ; Warning  ; Input port expression (8 bits) is wider than the input port (4 bits) it drives.  The 4 most-significant bit(s) in the expression will be dangling if they have no other fanouts. ;
++-----------+-------+----------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+
+
++-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Port Connectivity Checks: "hex_7seg:seg3"                                                                                                                                                                       ;
++-----------+-------+----------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Port      ; Type  ; Severity ; Details                                                                                                                                                                          ;
++-----------+-------+----------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; hex_digit ; Input ; Warning  ; Input port expression (8 bits) is wider than the input port (4 bits) it drives.  The 4 most-significant bit(s) in the expression will be dangling if they have no other fanouts. ;
++-----------+-------+----------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+
+
++-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Port Connectivity Checks: "hex_7seg:seg2"                                                                                                                                                                       ;
++-----------+-------+----------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Port      ; Type  ; Severity ; Details                                                                                                                                                                          ;
++-----------+-------+----------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; hex_digit ; Input ; Warning  ; Input port expression (8 bits) is wider than the input port (4 bits) it drives.  The 4 most-significant bit(s) in the expression will be dangling if they have no other fanouts. ;
++-----------+-------+----------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+
+
++-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Port Connectivity Checks: "hex_7seg:seg1"                                                                                                                                                                       ;
++-----------+-------+----------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Port      ; Type  ; Severity ; Details                                                                                                                                                                          ;
++-----------+-------+----------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; hex_digit ; Input ; Warning  ; Input port expression (8 bits) is wider than the input port (4 bits) it drives.  The 4 most-significant bit(s) in the expression will be dangling if they have no other fanouts. ;
++-----------+-------+----------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+
+
++-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Port Connectivity Checks: "hex_7seg:seg0"                                                                                                                                                                       ;
++-----------+-------+----------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Port      ; Type  ; Severity ; Details                                                                                                                                                                          ;
++-----------+-------+----------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; hex_digit ; Input ; Warning  ; Input port expression (8 bits) is wider than the input port (4 bits) it drives.  The 4 most-significant bit(s) in the expression will be dangling if they have no other fanouts. ;
++-----------+-------+----------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+
+
++----------------------------------------------------------------------------------------------------------------------+
+; Port Connectivity Checks: "receiver:uart_rx"                                                                         ;
++------------+--------+----------+-------------------------------------------------------------------------------------+
+; Port       ; Type   ; Severity ; Details                                                                             ;
++------------+--------+----------+-------------------------------------------------------------------------------------+
+; data[6..0] ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed. ;
++------------+--------+----------+-------------------------------------------------------------------------------------+
+
+
++--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Port Connectivity Checks: "transmitter:uart_tx"                                                                                                                                                              ;
++------+-------+----------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Port ; Type  ; Severity ; Details                                                                                                                                                                            ;
++------+-------+----------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; din  ; Input ; Warning  ; Input port expression (32 bits) is wider than the input port (8 bits) it drives.  The 24 most-significant bit(s) in the expression will be dangling if they have no other fanouts. ;
++------+-------+----------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+
+
++----------------------------------------------------------------------+
+; Port Connectivity Checks: "RS232_Out:u2|Baud_Counter:Out_Counter"    ;
++-------------------------+--------+----------+------------------------+
+; Port                    ; Type   ; Severity ; Details                ;
++-------------------------+--------+----------+------------------------+
+; baud_clock_falling_edge ; Output ; Info     ; Explicitly unconnected ;
++-------------------------+--------+----------+------------------------+
+
+
++-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Port Connectivity Checks: "RS232_Out:u2"                                                                                                                                                      ;
++-------------------+--------+----------+-------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Port              ; Type   ; Severity ; Details                                                                                                                                               ;
++-------------------+--------+----------+-------------------------------------------------------------------------------------------------------------------------------------------------------+
+; transmit_data     ; Input  ; Warning  ; Input port expression (1 bits) is smaller than the input port (8 bits) it drives.  Extra input bit(s) "transmit_data[8..2]" will be connected to GND. ;
+; transmitting_data ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed.                                                                   ;
++-------------------+--------+----------+-------------------------------------------------------------------------------------------------------------------------------------------------------+
+
+
++----------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Port Connectivity Checks: "LCD_Display:u1"                                                                                                                     ;
++------------+--------+----------+-------------------------------------------------------------------------------------------------------------------------------+
+; Port       ; Type   ; Severity ; Details                                                                                                                       ;
++------------+--------+----------+-------------------------------------------------------------------------------------------------------------------------------+
+; char_index ; Output ; Warning  ; Output or bidir port (6 bits) is wider than the port expression (5 bits) it drives; bit(s) "char_index[5..5]" have no fanouts ;
++------------+--------+----------+-------------------------------------------------------------------------------------------------------------------------------+
+
+
++----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Port Connectivity Checks: "LCD_display_string:d"                                                                                                                     ;
++------+--------+----------+-------------------------------------------------------------------------------------------------------------------------------------------+
+; Port ; Type   ; Severity ; Details                                                                                                                                   ;
++------+--------+----------+-------------------------------------------------------------------------------------------------------------------------------------------+
+; q    ; Input  ; Warning  ; Input port expression (5 bits) is smaller than the input port (8 bits) it drives.  Extra input bit(s) "q[7..5]" will be connected to GND. ;
+; adx  ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed.                                                       ;
+; swap ; Output ; Warning  ; Declared by entity but not connected by instance. Logic that only feeds a dangling port will be removed.                                  ;
++------+--------+----------+-------------------------------------------------------------------------------------------------------------------------------------------+
+
+
++----------------------------------------------------------------------------------------------------------------+
+; Port Connectivity Checks: "romtext:mem1"                                                                       ;
++------+--------+----------+-------------------------------------------------------------------------------------+
+; Port ; Type   ; Severity ; Details                                                                             ;
++------+--------+----------+-------------------------------------------------------------------------------------+
+; q    ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed. ;
++------+--------+----------+-------------------------------------------------------------------------------------+
+
+
++-------------------------------+
+; Elapsed Time Per Partition    ;
++----------------+--------------+
+; Partition Name ; Elapsed Time ;
++----------------+--------------+
+; Top            ; 00:00:02     ;
++----------------+--------------+
+
+
++-------------------------------+
+; Analysis & Synthesis Messages ;
++-------------------------------+
+Info: *******************************************************************
+Info: Running Quartus II 64-Bit Analysis & Synthesis
+    Info: Version 13.0.1 Build 232 06/12/2013 Service Pack 1 SJ Full Version
+    Info: Processing started: Tue Jun 16 22:55:33 2015
+Info: Command: quartus_map --read_settings_files=on --write_settings_files=off rs232lab -c rs232lab
+Info (11104): Parallel Compilation has detected 4 hyper-threaded processors. However, the extra hyper-threaded processors will not be used by default. Parallel Compilation will use 2 of the 2 physical processors detected instead.
+Info (12021): Found 1 design units, including 1 entities, in source file baud_counter.v
+    Info (12023): Found entity 1: Baud_Counter
+Info (12021): Found 1 design units, including 1 entities, in source file lcd_display.v
+    Info (12023): Found entity 1: LCD_Display
+Info (12021): Found 1 design units, including 1 entities, in source file lcd_display_string.v
+    Info (12023): Found entity 1: LCD_display_string
+Info (12021): Found 1 design units, including 1 entities, in source file reset_delay.v
+    Info (12023): Found entity 1: Reset_Delay
+Info (12021): Found 1 design units, including 1 entities, in source file rs232_in.v
+    Info (12023): Found entity 1: RS232_In
+Info (12021): Found 1 design units, including 1 entities, in source file rs232_out.v
+    Info (12023): Found entity 1: RS232_Out
+Info (12021): Found 1 design units, including 1 entities, in source file rs232lab.v
+    Info (12023): Found entity 1: rs232lab
+Info (12021): Found 1 design units, including 1 entities, in source file romtext.v
+    Info (12023): Found entity 1: romtext
+Info (12021): Found 1 design units, including 1 entities, in source file oneshot.v
+    Info (12023): Found entity 1: oneshot
+Info (12021): Found 1 design units, including 1 entities, in source file transmitter.v
+    Info (12023): Found entity 1: transmitter
+Info (12021): Found 1 design units, including 1 entities, in source file reciever.v
+    Info (12023): Found entity 1: receiver
+Info (12021): Found 1 design units, including 1 entities, in source file baud_rate_gen.v
+    Info (12023): Found entity 1: baud_rate_gen
+Info (12021): Found 1 design units, including 1 entities, in source file spinn_driver.v
+    Info (12023): Found entity 1: spinn_driver
+Warning (10335): Unrecognized synthesis attribute "IOB" at spio_spinnaker_link_sync.v(43)
+Info (12021): Found 1 design units, including 1 entities, in source file spio_spinnaker_link_sync.v
+    Info (12023): Found entity 1: spio_spinnaker_link_sync
+Warning (10236): Verilog HDL Implicit Net warning at rs232lab.v(140): created implicit net for "rx_data"
+Info (12127): Elaborating entity "rs232lab" for the top level hierarchy
+Warning (10036): Verilog HDL or VHDL warning at rs232lab.v(35): object "is_red" assigned a value but never read
+Warning (10036): Verilog HDL or VHDL warning at rs232lab.v(117): object "clk" assigned a value but never read
+Warning (10034): Output port "HEX5" at rs232lab.v(5) has no driver
+Warning (10034): Output port "HEX6" at rs232lab.v(5) has no driver
+Warning (10034): Output port "HEX7" at rs232lab.v(5) has no driver
+Warning (10034): Output port "LEDG[8..3]" at rs232lab.v(6) has no driver
+Warning (10034): Output port "LEDR[15..2]" at rs232lab.v(7) has no driver
+Info (12128): Elaborating entity "Reset_Delay" for hierarchy "Reset_Delay:r0"
+Info (12128): Elaborating entity "romtext" for hierarchy "romtext:mem1"
+Info (12128): Elaborating entity "altsyncram" for hierarchy "romtext:mem1|altsyncram:altsyncram_component"
+Info (12130): Elaborated megafunction instantiation "romtext:mem1|altsyncram:altsyncram_component"
+Info (12133): Instantiated megafunction "romtext:mem1|altsyncram:altsyncram_component" with the following parameter:
+    Info (12134): Parameter "clock_enable_input_a" = "BYPASS"
+    Info (12134): Parameter "clock_enable_output_a" = "BYPASS"
+    Info (12134): Parameter "init_file" = "text.mif"
+    Info (12134): Parameter "intended_device_family" = "Cyclone II"
+    Info (12134): Parameter "lpm_hint" = "ENABLE_RUNTIME_MOD=NO"
+    Info (12134): Parameter "lpm_type" = "altsyncram"
+    Info (12134): Parameter "numwords_a" = "256"
+    Info (12134): Parameter "operation_mode" = "ROM"
+    Info (12134): Parameter "outdata_aclr_a" = "NONE"
+    Info (12134): Parameter "outdata_reg_a" = "UNREGISTERED"
+    Info (12134): Parameter "widthad_a" = "8"
+    Info (12134): Parameter "width_a" = "8"
+    Info (12134): Parameter "width_byteena_a" = "1"
+Info (12021): Found 1 design units, including 1 entities, in source file db/altsyncram_gk71.tdf
+    Info (12023): Found entity 1: altsyncram_gk71
+Info (12128): Elaborating entity "altsyncram_gk71" for hierarchy "romtext:mem1|altsyncram:altsyncram_component|altsyncram_gk71:auto_generated"
+Info (12128): Elaborating entity "LCD_display_string" for hierarchy "LCD_display_string:d"
+Warning (10034): Output port "swap" at LCD_display_string.v(21) has no driver
+Info (12128): Elaborating entity "LCD_Display" for hierarchy "LCD_Display:u1"
+Info (12128): Elaborating entity "oneshot" for hierarchy "oneshot:trig"
+Info (12128): Elaborating entity "RS232_Out" for hierarchy "RS232_Out:u2"
+Info (12128): Elaborating entity "Baud_Counter" for hierarchy "RS232_Out:u2|Baud_Counter:Out_Counter"
+Info (12128): Elaborating entity "baud_rate_gen" for hierarchy "baud_rate_gen:uart_baud"
+Info (12128): Elaborating entity "transmitter" for hierarchy "transmitter:uart_tx"
+Info (12128): Elaborating entity "receiver" for hierarchy "receiver:uart_rx"
+Warning (10230): Verilog HDL assignment warning at reciever.v(109): truncated value with size 16 to match size of target (9)
+Warning (10230): Verilog HDL assignment warning at reciever.v(179): truncated value with size 32 to match size of target (8)
+Warning (12125): Using design file hex_7seg.v, which is not specified as a design file for the current project, but contains definitions for 1 design units and 1 entities in project
+    Info (12023): Found entity 1: hex_7seg
+Info (12128): Elaborating entity "hex_7seg" for hierarchy "hex_7seg:seg0"
+Info (12128): Elaborating entity "spinn_driver" for hierarchy "spinn_driver:driv"
+Info (10264): Verilog HDL Case Statement information at spinn_driver.v(186): all case item expressions in this case statement are onehot
+Warning (10230): Verilog HDL assignment warning at spinn_driver.v(246): truncated value with size 32 to match size of target (5)
+Info (10264): Verilog HDL Case Statement information at spinn_driver.v(267): all case item expressions in this case statement are onehot
+Info (12128): Elaborating entity "spio_spinnaker_link_sync" for hierarchy "spio_spinnaker_link_sync:sync"
+Warning (14284): Synthesized away the following node(s):
+    Warning (14285): Synthesized away the following RAM node(s):
+        Warning (14320): Synthesized away node "romtext:mem1|altsyncram:altsyncram_component|altsyncram_gk71:auto_generated|q_a[0]"
+        Warning (14320): Synthesized away node "romtext:mem1|altsyncram:altsyncram_component|altsyncram_gk71:auto_generated|q_a[1]"
+        Warning (14320): Synthesized away node "romtext:mem1|altsyncram:altsyncram_component|altsyncram_gk71:auto_generated|q_a[2]"
+        Warning (14320): Synthesized away node "romtext:mem1|altsyncram:altsyncram_component|altsyncram_gk71:auto_generated|q_a[3]"
+        Warning (14320): Synthesized away node "romtext:mem1|altsyncram:altsyncram_component|altsyncram_gk71:auto_generated|q_a[4]"
+        Warning (14320): Synthesized away node "romtext:mem1|altsyncram:altsyncram_component|altsyncram_gk71:auto_generated|q_a[5]"
+        Warning (14320): Synthesized away node "romtext:mem1|altsyncram:altsyncram_component|altsyncram_gk71:auto_generated|q_a[6]"
+        Warning (14320): Synthesized away node "romtext:mem1|altsyncram:altsyncram_component|altsyncram_gk71:auto_generated|q_a[7]"
+Warning (276027): Inferred dual-clock RAM node "LCD_display_string:d|mem_rtl_0" from synchronous design logic.  The read-during-write behavior of a dual-clock RAM is undefined and may not match the behavior of the original design.
+Info (19000): Inferred 1 megafunctions from design logic
+    Info (276029): Inferred altsyncram megafunction from the following design logic: "LCD_display_string:d|mem_rtl_0" 
+        Info (286033): Parameter OPERATION_MODE set to DUAL_PORT
+        Info (286033): Parameter WIDTH_A set to 8
+        Info (286033): Parameter WIDTHAD_A set to 5
+        Info (286033): Parameter NUMWORDS_A set to 32
+        Info (286033): Parameter WIDTH_B set to 8
+        Info (286033): Parameter WIDTHAD_B set to 5
+        Info (286033): Parameter NUMWORDS_B set to 32
+        Info (286033): Parameter ADDRESS_ACLR_A set to NONE
+        Info (286033): Parameter OUTDATA_REG_B set to UNREGISTERED
+        Info (286033): Parameter ADDRESS_ACLR_B set to NONE
+        Info (286033): Parameter OUTDATA_ACLR_B set to NONE
+        Info (286033): Parameter ADDRESS_REG_B set to CLOCK1
+        Info (286033): Parameter INDATA_ACLR_A set to NONE
+        Info (286033): Parameter WRCONTROL_ACLR_A set to NONE
+        Info (286033): Parameter INIT_FILE set to db/rs232lab.ram0_LCD_display_string_8e8bc469.hdl.mif
+Info (12130): Elaborated megafunction instantiation "LCD_display_string:d|altsyncram:mem_rtl_0"
+Info (12133): Instantiated megafunction "LCD_display_string:d|altsyncram:mem_rtl_0" with the following parameter:
+    Info (12134): Parameter "OPERATION_MODE" = "DUAL_PORT"
+    Info (12134): Parameter "WIDTH_A" = "8"
+    Info (12134): Parameter "WIDTHAD_A" = "5"
+    Info (12134): Parameter "NUMWORDS_A" = "32"
+    Info (12134): Parameter "WIDTH_B" = "8"
+    Info (12134): Parameter "WIDTHAD_B" = "5"
+    Info (12134): Parameter "NUMWORDS_B" = "32"
+    Info (12134): Parameter "ADDRESS_ACLR_A" = "NONE"
+    Info (12134): Parameter "OUTDATA_REG_B" = "UNREGISTERED"
+    Info (12134): Parameter "ADDRESS_ACLR_B" = "NONE"
+    Info (12134): Parameter "OUTDATA_ACLR_B" = "NONE"
+    Info (12134): Parameter "ADDRESS_REG_B" = "CLOCK1"
+    Info (12134): Parameter "INDATA_ACLR_A" = "NONE"
+    Info (12134): Parameter "WRCONTROL_ACLR_A" = "NONE"
+    Info (12134): Parameter "INIT_FILE" = "db/rs232lab.ram0_LCD_display_string_8e8bc469.hdl.mif"
+Info (12021): Found 1 design units, including 1 entities, in source file db/altsyncram_auj1.tdf
+    Info (12023): Found entity 1: altsyncram_auj1
+Warning (12241): 9 hierarchies have connectivity warnings - see the Connectivity Checks report folder
+Warning (13034): The following nodes have both tri-state and non-tri-state drivers
+    Warning (13035): Inserted always-enabled tri-state buffer between "GPIO_0[1]" and its non-tri-state driver.
+    Warning (13035): Inserted always-enabled tri-state buffer between "GPIO_0[3]" and its non-tri-state driver.
+    Warning (13035): Inserted always-enabled tri-state buffer between "GPIO_1[0]" and its non-tri-state driver.
+    Warning (13035): Inserted always-enabled tri-state buffer between "GPIO_1[1]" and its non-tri-state driver.
+    Warning (13035): Inserted always-enabled tri-state buffer between "GPIO_1[2]" and its non-tri-state driver.
+    Warning (13035): Inserted always-enabled tri-state buffer between "GPIO_1[3]" and its non-tri-state driver.
+    Warning (13035): Inserted always-enabled tri-state buffer between "GPIO_1[4]" and its non-tri-state driver.
+    Warning (13035): Inserted always-enabled tri-state buffer between "GPIO_1[5]" and its non-tri-state driver.
+    Warning (13035): Inserted always-enabled tri-state buffer between "GPIO_1[6]" and its non-tri-state driver.
+Warning (13039): The following bidir pins have no drivers
+    Warning (13040): Bidir "GPIO_0[0]" has no driver
+    Warning (13040): Bidir "GPIO_0[2]" has no driver
+    Warning (13040): Bidir "GPIO_0[34]" has no driver
+    Warning (13040): Bidir "GPIO_1[7]" has no driver
+    Warning (13040): Bidir "GPIO_0[4]" has no driver
+    Warning (13040): Bidir "GPIO_0[5]" has no driver
+    Warning (13040): Bidir "GPIO_0[6]" has no driver
+    Warning (13040): Bidir "GPIO_0[7]" has no driver
+    Warning (13040): Bidir "GPIO_0[8]" has no driver
+    Warning (13040): Bidir "GPIO_0[9]" has no driver
+    Warning (13040): Bidir "GPIO_0[10]" has no driver
+    Warning (13040): Bidir "GPIO_0[11]" has no driver
+    Warning (13040): Bidir "GPIO_0[12]" has no driver
+    Warning (13040): Bidir "GPIO_0[13]" has no driver
+    Warning (13040): Bidir "GPIO_0[14]" has no driver
+    Warning (13040): Bidir "GPIO_0[15]" has no driver
+    Warning (13040): Bidir "GPIO_0[16]" has no driver
+    Warning (13040): Bidir "GPIO_0[17]" has no driver
+    Warning (13040): Bidir "GPIO_0[18]" has no driver
+    Warning (13040): Bidir "GPIO_0[19]" has no driver
+    Warning (13040): Bidir "GPIO_0[20]" has no driver
+    Warning (13040): Bidir "GPIO_0[21]" has no driver
+    Warning (13040): Bidir "GPIO_0[22]" has no driver
+    Warning (13040): Bidir "GPIO_0[23]" has no driver
+    Warning (13040): Bidir "GPIO_0[24]" has no driver
+    Warning (13040): Bidir "GPIO_0[25]" has no driver
+    Warning (13040): Bidir "GPIO_0[26]" has no driver
+    Warning (13040): Bidir "GPIO_0[27]" has no driver
+    Warning (13040): Bidir "GPIO_0[28]" has no driver
+    Warning (13040): Bidir "GPIO_0[29]" has no driver
+    Warning (13040): Bidir "GPIO_0[30]" has no driver
+    Warning (13040): Bidir "GPIO_0[31]" has no driver
+    Warning (13040): Bidir "GPIO_0[32]" has no driver
+    Warning (13040): Bidir "GPIO_0[33]" has no driver
+    Warning (13040): Bidir "GPIO_0[35]" has no driver
+    Warning (13040): Bidir "GPIO_1[8]" has no driver
+    Warning (13040): Bidir "GPIO_1[9]" has no driver
+    Warning (13040): Bidir "GPIO_1[10]" has no driver
+    Warning (13040): Bidir "GPIO_1[11]" has no driver
+    Warning (13040): Bidir "GPIO_1[12]" has no driver
+    Warning (13040): Bidir "GPIO_1[13]" has no driver
+    Warning (13040): Bidir "GPIO_1[14]" has no driver
+    Warning (13040): Bidir "GPIO_1[15]" has no driver
+    Warning (13040): Bidir "GPIO_1[16]" has no driver
+    Warning (13040): Bidir "GPIO_1[17]" has no driver
+    Warning (13040): Bidir "GPIO_1[18]" has no driver
+    Warning (13040): Bidir "GPIO_1[19]" has no driver
+    Warning (13040): Bidir "GPIO_1[20]" has no driver
+    Warning (13040): Bidir "GPIO_1[21]" has no driver
+    Warning (13040): Bidir "GPIO_1[22]" has no driver
+    Warning (13040): Bidir "GPIO_1[23]" has no driver
+    Warning (13040): Bidir "GPIO_1[24]" has no driver
+    Warning (13040): Bidir "GPIO_1[25]" has no driver
+    Warning (13040): Bidir "GPIO_1[26]" has no driver
+    Warning (13040): Bidir "GPIO_1[27]" has no driver
+    Warning (13040): Bidir "GPIO_1[28]" has no driver
+    Warning (13040): Bidir "GPIO_1[29]" has no driver
+    Warning (13040): Bidir "GPIO_1[30]" has no driver
+    Warning (13040): Bidir "GPIO_1[31]" has no driver
+    Warning (13040): Bidir "GPIO_1[32]" has no driver
+    Warning (13040): Bidir "GPIO_1[33]" has no driver
+    Warning (13040): Bidir "GPIO_1[34]" has no driver
+    Warning (13040): Bidir "GPIO_1[35]" has no driver
+Info (13000): Registers with preset signals will power-up high
+Info (13003): DEV_CLRn pin will set, and not reset, register with preset signal due to NOT Gate Push-Back
+Warning (13009): TRI or OPNDRN buffers permanently enabled
+    Warning (13010): Node "GPIO_0[1]~synth"
+    Warning (13010): Node "GPIO_0[3]~synth"
+    Warning (13010): Node "GPIO_1[0]~synth"
+    Warning (13010): Node "GPIO_1[1]~synth"
+    Warning (13010): Node "GPIO_1[2]~synth"
+    Warning (13010): Node "GPIO_1[3]~synth"
+    Warning (13010): Node "GPIO_1[4]~synth"
+    Warning (13010): Node "GPIO_1[5]~synth"
+    Warning (13010): Node "GPIO_1[6]~synth"
+    Warning (13010): Node "LCD_Display:u1|DATA_BUS[0]~synth"
+    Warning (13010): Node "LCD_Display:u1|DATA_BUS[1]~synth"
+    Warning (13010): Node "LCD_Display:u1|DATA_BUS[2]~synth"
+    Warning (13010): Node "LCD_Display:u1|DATA_BUS[3]~synth"
+    Warning (13010): Node "LCD_Display:u1|DATA_BUS[4]~synth"
+    Warning (13010): Node "LCD_Display:u1|DATA_BUS[5]~synth"
+    Warning (13010): Node "LCD_Display:u1|DATA_BUS[6]~synth"
+    Warning (13010): Node "LCD_Display:u1|DATA_BUS[7]~synth"
+Warning (13024): Output pins are stuck at VCC or GND
+    Warning (13410): Pin "HEX0[0]" is stuck at GND
+    Warning (13410): Pin "HEX0[1]" is stuck at GND
+    Warning (13410): Pin "HEX0[2]" is stuck at GND
+    Warning (13410): Pin "HEX0[3]" is stuck at GND
+    Warning (13410): Pin "HEX0[4]" is stuck at GND
+    Warning (13410): Pin "HEX0[5]" is stuck at GND
+    Warning (13410): Pin "HEX0[6]" is stuck at VCC
+    Warning (13410): Pin "HEX1[0]" is stuck at GND
+    Warning (13410): Pin "HEX1[2]" is stuck at GND
+    Warning (13410): Pin "HEX1[3]" is stuck at GND
+    Warning (13410): Pin "HEX1[5]" is stuck at GND
+    Warning (13410): Pin "HEX2[1]" is stuck at GND
+    Warning (13410): Pin "HEX2[2]" is stuck at GND
+    Warning (13410): Pin "HEX2[6]" is stuck at VCC
+    Warning (13410): Pin "HEX4[1]" is stuck at GND
+    Warning (13410): Pin "HEX4[2]" is stuck at GND
+    Warning (13410): Pin "HEX4[6]" is stuck at VCC
+    Warning (13410): Pin "HEX5[0]" is stuck at GND
+    Warning (13410): Pin "HEX5[1]" is stuck at GND
+    Warning (13410): Pin "HEX5[2]" is stuck at GND
+    Warning (13410): Pin "HEX5[3]" is stuck at GND
+    Warning (13410): Pin "HEX5[4]" is stuck at GND
+    Warning (13410): Pin "HEX5[5]" is stuck at GND
+    Warning (13410): Pin "HEX5[6]" is stuck at GND
+    Warning (13410): Pin "HEX6[0]" is stuck at GND
+    Warning (13410): Pin "HEX6[1]" is stuck at GND
+    Warning (13410): Pin "HEX6[2]" is stuck at GND
+    Warning (13410): Pin "HEX6[3]" is stuck at GND
+    Warning (13410): Pin "HEX6[4]" is stuck at GND
+    Warning (13410): Pin "HEX6[5]" is stuck at GND
+    Warning (13410): Pin "HEX6[6]" is stuck at GND
+    Warning (13410): Pin "HEX7[0]" is stuck at GND
+    Warning (13410): Pin "HEX7[1]" is stuck at GND
+    Warning (13410): Pin "HEX7[2]" is stuck at GND
+    Warning (13410): Pin "HEX7[3]" is stuck at GND
+    Warning (13410): Pin "HEX7[4]" is stuck at GND
+    Warning (13410): Pin "HEX7[5]" is stuck at GND
+    Warning (13410): Pin "HEX7[6]" is stuck at GND
+    Warning (13410): Pin "LEDG[3]" is stuck at GND
+    Warning (13410): Pin "LEDG[4]" is stuck at GND
+    Warning (13410): Pin "LEDG[5]" is stuck at GND
+    Warning (13410): Pin "LEDG[6]" is stuck at GND
+    Warning (13410): Pin "LEDG[7]" is stuck at GND
+    Warning (13410): Pin "LEDG[8]" is stuck at GND
+    Warning (13410): Pin "LEDR[2]" is stuck at GND
+    Warning (13410): Pin "LEDR[3]" is stuck at GND
+    Warning (13410): Pin "LEDR[4]" is stuck at GND
+    Warning (13410): Pin "LEDR[5]" is stuck at GND
+    Warning (13410): Pin "LEDR[6]" is stuck at GND
+    Warning (13410): Pin "LEDR[7]" is stuck at GND
+    Warning (13410): Pin "LEDR[8]" is stuck at GND
+    Warning (13410): Pin "LEDR[9]" is stuck at GND
+    Warning (13410): Pin "LEDR[10]" is stuck at GND
+    Warning (13410): Pin "LEDR[11]" is stuck at GND
+    Warning (13410): Pin "LEDR[12]" is stuck at GND
+    Warning (13410): Pin "LEDR[13]" is stuck at GND
+    Warning (13410): Pin "LEDR[14]" is stuck at GND
+    Warning (13410): Pin "LEDR[15]" is stuck at GND
+    Warning (13410): Pin "LCD_ON" is stuck at VCC
+    Warning (13410): Pin "LCD_BLON" is stuck at VCC
+    Warning (13410): Pin "LCD_RW" is stuck at GND
+Warning (18029): Output pin "LEDR[16]" driven by bidirectional pin "GPIO_0[34]" cannot be tri-stated
+Info (17049): 23 registers lost all their fanouts during netlist optimizations.
+Info (144001): Generated suppressed messages file H:/4th-Year/FYP_Q/rs232lab/rs232lab/rs232lab.map.smsg
+Info (16010): Generating hard_block partition "hard_block:auto_generated_inst"
+    Info (16011): Adding 0 node(s), including 0 DDIO, 0 PLL, 0 transceiver and 0 LCELL
+Warning (21074): Design contains 19 input pin(s) that do not drive logic
+    Warning (15610): No output dependent on input pin "KEY[1]"
+    Warning (15610): No output dependent on input pin "SW[1]"
+    Warning (15610): No output dependent on input pin "SW[2]"
+    Warning (15610): No output dependent on input pin "SW[3]"
+    Warning (15610): No output dependent on input pin "SW[4]"
+    Warning (15610): No output dependent on input pin "SW[5]"
+    Warning (15610): No output dependent on input pin "SW[6]"
+    Warning (15610): No output dependent on input pin "SW[7]"
+    Warning (15610): No output dependent on input pin "SW[8]"
+    Warning (15610): No output dependent on input pin "SW[9]"
+    Warning (15610): No output dependent on input pin "SW[10]"
+    Warning (15610): No output dependent on input pin "SW[11]"
+    Warning (15610): No output dependent on input pin "SW[12]"
+    Warning (15610): No output dependent on input pin "SW[13]"
+    Warning (15610): No output dependent on input pin "SW[14]"
+    Warning (15610): No output dependent on input pin "SW[15]"
+    Warning (15610): No output dependent on input pin "SW[16]"
+    Warning (15610): No output dependent on input pin "SW[17]"
+    Warning (15610): No output dependent on input pin "UART_RXD"
+Info (21057): Implemented 739 device resources after synthesis - the final resource count might be different
+    Info (21058): Implemented 24 input pins
+    Info (21059): Implemented 89 output pins
+    Info (21060): Implemented 80 bidirectional pins
+    Info (21061): Implemented 538 logic cells
+    Info (21064): Implemented 8 RAM segments
+Info: Quartus II 64-Bit Analysis & Synthesis was successful. 0 errors, 201 warnings
+    Info: Peak virtual memory: 484 megabytes
+    Info: Processing ended: Tue Jun 16 22:55:41 2015
+    Info: Elapsed time: 00:00:08
+    Info: Total CPU time (on all processors): 00:00:05
+
+
++------------------------------------------+
+; Analysis & Synthesis Suppressed Messages ;
++------------------------------------------+
+The suppressed messages can be found in H:/4th-Year/FYP_Q/rs232lab/rs232lab/rs232lab.map.smsg.
+
+

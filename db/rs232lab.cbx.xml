@@ -1,0 +1,7 @@
+<?xml version="1.0" ?>
+<LOG_ROOT>
+	<PROJECT NAME="rs232lab">
+		<CBX_INST_ENTRY INSTANCE_NAME="|rs232lab|LCD_display_string:d|altsyncram:mem_rtl_0" CBX_FILE_NAME="altsyncram_auj1.tdf"/>
+		<CBX_INST_ENTRY INSTANCE_NAME="|rs232lab|romtext:mem1|altsyncram:altsyncram_component" CBX_FILE_NAME="altsyncram_gk71.tdf"/>
+	</PROJECT>
+</LOG_ROOT>
